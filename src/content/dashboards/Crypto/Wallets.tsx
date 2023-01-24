@@ -108,7 +108,7 @@ export const Wallets: React.FC<props> = ({ datas }) => {
       </Box>
       <Grid container spacing={3}>
 
-{/*         
+        
         {datas.map((item, index) => (
           <Grid key={index} xs={12} sm={6} md={3} item>
             <Card
@@ -160,7 +160,7 @@ export const Wallets: React.FC<props> = ({ datas }) => {
               </CardContent>
             </Card>
           </Grid>
-        ))} */}
+        ))}
 
         <Grid xs={12} sm={6} md={3} item>
           <Tooltip arrow title="Click to add a new wallet"  onClick={() => showModalDelete(true)}>
