@@ -32,7 +32,6 @@ export const ModalDelete: React.FC<props> = ({
   };
 
   const insertTarget = () => {
-    
     deleteTarget(selectTarget[0].id).then((status) => {
       setError(
         status === 200
@@ -42,7 +41,6 @@ export const ModalDelete: React.FC<props> = ({
     });
   };
 
-  
   useEffect(() => {
     if (error.code === 200) {
       updateUser(sector);
@@ -51,9 +49,8 @@ export const ModalDelete: React.FC<props> = ({
 
   return (
     <div>
-  
       <Dialog open={value} onClose={handleClose}>
-        <DialogTitle>Eliminar registro</DialogTitle>
+        <DialogTitle>Eliminar cliente</DialogTitle>
         <DialogContent>
           {error.code === 200 ? (
             <Alert severity="success">
@@ -65,8 +62,10 @@ export const ModalDelete: React.FC<props> = ({
             <div>
               <Alert severity="error">
                 <AlertTitle>Estas seguro?</AlertTitle>
-               Estas seguro de Eliminar la tarjeta de   <strong>{selectTarget[0].nombre} {selectTarget[0].apellido} </strong>
-                aun tiene una deuda de <strong>${selectTarget[0].subtotal} </strong>
+                Se Eliminara el cliente{' '}
+                <strong>
+                  {selectTarget[0].nombre} {selectTarget[0].apellido}{' '}
+                </strong>
               </Alert>
             </div>
           )}

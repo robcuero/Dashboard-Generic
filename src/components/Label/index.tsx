@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 
 interface LabelProps {
+  marginTop?:string;
   className?: string;
   color?:
     | 'primary'
@@ -69,10 +70,11 @@ const Label: FC<LabelProps> = ({
   className,
   color = 'secondary',
   children,
+  marginTop,
   ...rest
 }) => {
   return (
-    <LabelWrapper className={'MuiLabel-' + color} {...rest}>
+    <LabelWrapper style={{marginTop:marginTop}} className={'MuiLabel-' + color} {...rest}>
       {children}
     </LabelWrapper>
   );

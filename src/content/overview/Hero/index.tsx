@@ -102,7 +102,7 @@ function Hero() {
         <Grid item md={10} lg={8} mx="auto">
           <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
           <TypographyH1 sx={{ mb: 2 }} variant="h1">
-            Creditos Jerico
+            ZONAFIT
           </TypographyH1>
           <div>
             <TextField
@@ -141,11 +141,11 @@ function Hero() {
             variant="contained"
             disabled={user.usuario && user.contrasena ? false : true}
           >
-            Ingresar
+            Iniciar sesion
           </Button>
 
           <Grid container spacing={3} mt={5}>
-            <Grid item md={6}>
+            <Grid item md={12}>
               <MuiAvatar>
                 <img
                   src="/static/images/logo/material-ui.svg"
@@ -154,29 +154,14 @@ function Hero() {
               </MuiAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>JORGE LOAYZA</b>
+                  <b>Powered by JORGE LOAYZA</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  CEO y fundador de CREDITOS JERICO, servicio de ventas de productos de casa.
+                  Soporte tecnico +593967054437
                 </Typography>
               </Typography>
             </Grid>
-            <Grid item md={6}>
-              <TsAvatar>
-                <img
-                  src="/static/images/logo/typescript.svg"
-                  alt="Typescript"
-                />
-              </TsAvatar>
-              <Typography variant="h4">
-                <Box sx={{ pb: 2 }}>
-                  <b>GENNY ZAMBRANO</b>
-                </Box>
-                <Typography component="span" variant="subtitle2">
-                  CEO y co-fundadora de CREDITOS JERICO, servicio de ventas de productos de casa.
-                </Typography>
-              </Typography>
-            </Grid>
+
           </Grid>
         </Grid>
       </Grid>

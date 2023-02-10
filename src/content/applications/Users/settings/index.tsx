@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import PageHeader from './PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
@@ -10,6 +10,8 @@ import ActivityTab from './ActivityTab';
 import EditProfileTab from './EditProfileTab';
 import NotificationsTab from './NotificationsTab';
 import SecurityTab from './SecurityTab';
+import { useLocation } from 'react-router';
+import { getUserDetail } from 'src/services/clientService';
 
 const TabsWrapper = styled(Tabs)(
   () => `
@@ -19,14 +21,28 @@ const TabsWrapper = styled(Tabs)(
 `
 );
 
-function ManagementUserSettings() {
-  const [currentTab, setCurrentTab] = useState<string>('activity');
+interface props {
+  idUser: any;
+}
+const ManagementUserSettings: React.FC<props> = ( ) => {
+  const location = useLocation();
+  const state: any = location.state;
+  console.log(location.state)
+  const [data, setData] = useState<any>(null);
+  useEffect(() => {
+    
+    getUserDetail(state.idUser).then((res) => {
+      setData(res);
+    });
+    // eslint-disable-next-line
+  }, []);
 
+  const [currentTab, setCurrentTab] = useState<string>('activity');
   const tabs = [
-    { value: 'activity', label: 'Activity' },
-    { value: 'edit_profile', label: 'Edit Profile' },
-    { value: 'notifications', label: 'Notifications' },
-    { value: 'security', label: 'Passwords/Security' }
+    { value: 'activity', label: 'Resumen' },
+    { value: 'edit_profile', label: 'Editar' },
+    { value: 'notifications', label: 'Suscripciones' },
+    { value: 'security', label: 'Facturas' }
   ];
 
   const handleTabsChange = (event: ChangeEvent<{}>, value: string): void => {
@@ -63,17 +79,21 @@ function ManagementUserSettings() {
               ))}
             </TabsWrapper>
           </Grid>
-          <Grid item xs={12}>
-            {currentTab === 'activity' && <ActivityTab />}
-            {currentTab === 'edit_profile' && <EditProfileTab />}
-            {currentTab === 'notifications' && <NotificationsTab />}
-            {currentTab === 'security' && <SecurityTab />}
-          </Grid>
+          {data !== null && (
+            <Grid item xs={12}>
+              {currentTab === 'activity' && (
+                <ActivityTab resume={data.cliente} />
+              )}
+              {currentTab === 'edit_profile' && <EditProfileTab />}
+              {currentTab === 'notifications' && <NotificationsTab />}
+              {currentTab === 'security' && <SecurityTab />}
+            </Grid>
+          )}
         </Grid>
       </Container>
       <Footer />
     </>
   );
-}
+};
 
 export default ManagementUserSettings;

@@ -63,9 +63,7 @@ export const ModalEdit: React.FC<props> = ({
     apellido: null,
     telefono: null,
     cedula: null,
-    total: 0,
-    abono: 0,
-    id_Sector: null
+    id_Suscripcion: null
   });
 
   useEffect(() => {
@@ -74,12 +72,9 @@ export const ModalEdit: React.FC<props> = ({
       idTarjeta: selectTarget[0].id,
       nombre: selectTarget[0].nombre,
       apellido: selectTarget[0].apellido,
-      abono: 0,
-      total: selectTarget[0].total,
       telefono: selectTarget[0].telefono,
-      subtotal: selectTarget[0].subtotal,
       cedula: selectTarget[0].cedula,
-      id_Sector: sector
+      id_Suscripcion: sector
     });
   }, [selectTarget]);
   const insertTarget = () => {
@@ -99,14 +94,11 @@ export const ModalEdit: React.FC<props> = ({
         apellido: user.apellido,
         telefono: user.telefono,
         cedula: user.cedula,
-        total: user.total,
-        abono: user.abono
       });
-      updateUser(user.id_Sector);
+      updateUser(user.id_Suscripcion);
     }
   }, [error.code]);
-  console.log('2222ss', user.telefono);
-  console.log('NUMBER.test(e.target.value)', NUMBER.test(user.telefono));
+
 
   return (
     <div>
@@ -137,7 +129,7 @@ export const ModalEdit: React.FC<props> = ({
                   {data?.map((data: any, index: number) => (
                     <MenuItem
                       onClick={() =>
-                        setUser({ ...user, id_Sector: data.idSector })
+                        setUser({ ...user, id_Suscripcion: data.idSuscripcion })
                       }
                       key={index}
                       value={index}
@@ -214,16 +206,7 @@ export const ModalEdit: React.FC<props> = ({
                   setUser({ ...user, telefono: e.target.value })
                 }
               />
-              <TextField
-                disabled
-                margin="dense"
-                id="name"
-                label="Total"
-                type="number"
-                defaultValue={user.total}
-                fullWidth
-                variant="standard"
-              />
+
 
               <Typography my={2} variant="h4">
                 Ingresar abono
@@ -233,36 +216,7 @@ export const ModalEdit: React.FC<props> = ({
                   <div></div>
                 </Grid>
                 <Grid item xs={4} md={6}>
-                  <TextField
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">$</InputAdornment>
-                      )
-                    }}
-                    helperText="El abono no puede ser mayor que el total"
-                    error={user.abono <= user.subtotal ? false : true}
-                    margin="dense"
-                    id="name"
-                    label="Nuevo Abono"
-                    defaultValue={0}
-                    type="number"
-                    fullWidth
-                    value={user.abono.toString()}
-                    onChange={(e) =>
-                      (SEPARATOR.test(e.target.value) ||
-                        Number(e.target.value) === 0) 
-                        &&
-                      setUser({ ...user, abono: Number(e.target.value) })
-                    }
-                    variant="standard"
-                    inputProps={{
-                      style: {
-                        fontSize: '30px',
-                        textAlign: 'right'
-                      },
-                      min: 0
-                    }}
-                  />
+      
                 </Grid>
               </Grid>
               <Typography
@@ -273,7 +227,7 @@ export const ModalEdit: React.FC<props> = ({
                   mb: 1
                 }}
               >
-                Deuda actual ${user.subtotal - user.abono}
+                Deuda actual 
               </Typography>
             </div>
           )}
@@ -295,11 +249,9 @@ export const ModalEdit: React.FC<props> = ({
             <Button
               disabled={
                 user.nombre &&
-                user.total &&
                 user.cedula &&
                 user.apellido &&
-                user.id_Sector &&
-                user.abono <= user.subtotal
+                user.id_Suscripcion
                   ? false
                   : true
               }

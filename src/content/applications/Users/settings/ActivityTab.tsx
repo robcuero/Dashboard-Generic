@@ -1,116 +1,227 @@
+import PropTypes from 'prop-types';
 import {
   Box,
-  CardMedia,
   Typography,
   Card,
-  CardHeader,
-  Divider,
+  Tooltip,
   Avatar,
-  IconButton,
   Button,
-  CardActions,
-  Link
+  IconButton,
+  Container,
+  Grid,
+  Alert
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import ShareIcon from '@mui/icons-material/Share';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import ArrowBackTwoToneIcon from '@mui/icons-material/ArrowBackTwoTone';
+import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
+import RecentActivity from './RecentActivity';
 
-import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
-import ThumbUpAltTwoToneIcon from '@mui/icons-material/ThumbUpAltTwoTone';
-import CommentTwoToneIcon from '@mui/icons-material/CommentTwoTone';
-import ShareTwoToneIcon from '@mui/icons-material/ShareTwoTone';
-import Text from 'src/components/Text';
+const Input = styled('input')({
+  display: 'none'
+});
 
-const CardActionsWrapper = styled(CardActions)(
+const AvatarWrapper = styled(Card)(
   ({ theme }) => `
-     background: ${theme.colors.alpha.black[5]};
-     padding: ${theme.spacing(3)};
+
+    position: relative;
+    overflow: visible;
+    display: inline-block;
+    margin-top: -${theme.spacing(9)};
+    margin-left: ${theme.spacing(2)};
+
+    .MuiAvatar-root {
+      width: ${theme.spacing(16)};
+      height: ${theme.spacing(16)};
+    }
 `
 );
 
-function ActivityTab() {
+const ButtonUploadWrapper = styled(Box)(
+  ({ theme }) => `
+    position: absolute;
+    width: ${theme.spacing(4)};
+    height: ${theme.spacing(4)};
+    bottom: -${theme.spacing(1)};
+    right: -${theme.spacing(1)};
+
+    .MuiIconButton-root {
+      border-radius: 100%;
+      background: ${theme.colors.primary.main};
+      color: ${theme.palette.primary.contrastText};
+      box-shadow: ${theme.colors.shadows.primary};
+      width: ${theme.spacing(4)};
+      height: ${theme.spacing(4)};
+      padding: 0;
+  
+      &:hover {
+        background: ${theme.colors.primary.dark};
+      }
+    }
+`
+);
+
+function ActivityTab(resume: any) {
+debugger
+  const client = resume.resume[0]
   return (
-    <Card>
-      <CardHeader
-        avatar={<Avatar src="/static/images/avatars/5.jpg" />}
-        action={
-          <IconButton color="primary">
-            <MoreHorizTwoToneIcon fontSize="medium" />
-          </IconButton>
-        }
-        titleTypographyProps={{ variant: 'h4' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
-        title="Allison Lipshutz"
-        subheader={
-          <>
-            Managing Partner,{' '}
-            <Link href="#" underline="hover">
-              #software
-            </Link>
-            ,{' '}
-            <Link href="#" underline="hover">
-              #managers
-            </Link>
-            , Google Inc.
-          </>
-        }
-      />
-      <Box px={3} pb={2}>
-        <Typography variant="h4" fontWeight="normal">
-          Welcome to organizing your remote office for maximum productivity.
-        </Typography>
-      </Box>
-      <CardMedia
-        sx={{ minHeight: 280 }}
-        image="/static/images/placeholders/covers/6.jpg"
-        title="Card Cover"
-      />
-      <Box p={3}>
-        <Typography variant="h2" sx={{ pb: 1 }}>
-          Organizing Your Remote Office for Maximum Productivity
-        </Typography>
-        <Typography variant="subtitle2">
-          <Link href="#" underline="hover">
-            example.com
-          </Link>{' '}
-          • 4 mins read
-        </Typography>
-      </Box>
-      <Divider />
-      <CardActionsWrapper
-        sx={{
-          display: { xs: 'block', md: 'flex' },
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
+    <>
+      <Container sx={{ mt: 3 }} maxWidth="lg">
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={3}
+        >
+          <Grid item xs={12} md={8}>
+            <Box display="flex" mb={3}>
+              <Tooltip arrow placement="top" title="Go back">
+                <IconButton color="primary" sx={{ p: 2, mr: 2 }}>
+                  <ArrowBackTwoToneIcon />
+                </IconButton>
+              </Tooltip>
+              <Box>
+                <Typography variant="h3" component="h3" gutterBottom>
+                  Perfil de {client.nombre} 
+                </Typography>
+                <Typography variant="subtitle2">
+                  Esta es una página de perfil. Fácil de modificar, siempre
+                  ultrarrápido
+                </Typography>
+              </Box>
+            </Box>
+            {/* <CardCover>
+  <CardMedia image={user.coverImg} />
+  <CardCoverAction>
+    <Input accept="image/*" id="change-cover" multiple type="file" />
+    <label htmlFor="change-cover">
+      <Button
+        startIcon={<UploadTwoToneIcon />}
+        variant="contained"
+        component="span"
       >
-        <Box>
-          <Button startIcon={<ThumbUpAltTwoToneIcon />} variant="contained">
-            Like
-          </Button>
-          <Button
-            startIcon={<CommentTwoToneIcon />}
-            variant="outlined"
-            sx={{ mx: 2 }}
-          >
-            Comment
-          </Button>
-          <Button startIcon={<ShareTwoToneIcon />} variant="outlined">
-            Share
-          </Button>
-        </Box>
-        <Box sx={{ mt: { xs: 2, md: 0 } }}>
-          <Typography variant="subtitle2" component="span">
-            <Text color="black">
-              <b>485</b>
-            </Text>{' '}
-            reactions •{' '}
-            <Text color="black">
-              <b>63</b>
-            </Text>{' '}
-            comments
-          </Typography>
-        </Box>
-      </CardActionsWrapper>
-    </Card>
+        Change cover
+      </Button>
+    </label>
+  </CardCoverAction>
+</CardCover> */}
+            <AvatarWrapper style={{ marginTop: '0px' }}>
+              <Avatar variant="rounded" alt={'user.name'} src={'user.avatar'} />
+              <ButtonUploadWrapper>
+                <Input
+                  accept="image/*"
+                  id="icon-button-file"
+                  name="icon-button-file"
+                  type="file"
+                />
+                <label htmlFor="icon-button-file">
+                  <IconButton component="span" color="primary">
+                    <UploadTwoToneIcon />
+                  </IconButton>
+                </label>
+              </ButtonUploadWrapper>
+            </AvatarWrapper>
+            <Box py={2} pl={2} mb={3}>
+              <Typography gutterBottom variant="h4">
+                {client.nombre} {client.apellido}
+              </Typography>
+
+              <Box alignItems="center">
+                <Box style={{ display: 'flex', columnGap: '5px' }}>
+                  <Alert
+                    variant="outlined"
+                    severity="success"
+                    style={{ width: '124px' }}
+                  >
+                    Activo
+                  </Alert>
+                  <Button size="small" variant="contained">
+                    <WhatsAppIcon />
+                    {'Mensaje '}
+                  </Button>
+                  <Button size="small" variant="outlined">
+                    <ShareIcon />
+                  </Button>
+                </Box>
+              </Box>
+
+              <Typography
+                sx={{ py: 2 }}
+                variant="subtitle2"
+                color="text.primary"
+              >
+                {client.direccion}
+              </Typography>
+
+              <Box
+                display={{ xs: 'block', md: 'flex' }}
+                alignItems="center"
+                style={{ columnGap: '10px' }}
+              >
+                <Typography gutterBottom variant="h4">
+                  {'Contacto: '}
+                </Typography>
+                <Typography
+                  sx={{ py: 2 }}
+                  variant="subtitle2"
+                  color="text.primary"
+                >
+                  {client.telefono}  | {client.correo}{' '}
+                </Typography>
+              </Box>
+
+              <Box
+                display={{ xs: 'block', md: 'flex' }}
+                alignItems="center"
+                style={{ columnGap: '10px' }}
+              >
+                <Typography gutterBottom variant="h4">
+                  {'Cedula: '}
+                </Typography>
+                <Typography variant="subtitle2" color="text.primary">
+                  {client.cedula}
+                </Typography>
+              </Box>
+              <Box
+                display={{ xs: 'block', md: 'flex' }}
+                alignItems="center"
+                style={{ columnGap: '10px' }}
+              >
+                <Typography gutterBottom variant="h4">
+                  {'Fecha de nacimiento: '}
+                </Typography>
+                <Typography
+                  sx={{ py: 2 }}
+                  variant="subtitle2"
+                  color="text.primary"
+                >
+                  {client.fechaNacimiento}
+                </Typography>
+              </Box>
+
+              <Box
+                display={{ xs: 'block', md: 'flex' }}
+                alignItems="center"
+                style={{ columnGap: '10px' }}
+              >
+                <Typography gutterBottom variant="h4">
+                  {'Tipo de Suscripcion: '}
+                </Typography>
+                <Typography variant="subtitle2" color="text.primary">
+                  {'Mensual'}
+                </Typography>
+              </Box>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <RecentActivity />
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 }
 

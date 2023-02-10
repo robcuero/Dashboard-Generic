@@ -1,16 +1,17 @@
 export interface Sale {
   idTarjeta?: any;
-  total: number;
-  abono: number;
   subtotal?: number;
+  correo?: any,
   nombre?: any;
   apellido?: any;
   telefono?: any;
   cedula?: string;
+  fechaNacimiento?: string;
   id_Cliente?: number;
-  id_Sector: string;
+  id_Suscripcion?: string;
   id_Producto?: any;
   message?: string;
+  fechaInicio?: string
 }
 
 

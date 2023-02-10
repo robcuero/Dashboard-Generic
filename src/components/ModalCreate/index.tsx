@@ -8,6 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
+  Grid,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -19,13 +20,23 @@ import React, { useEffect, useState } from 'react';
 import { Sale } from 'src/interface';
 import { getSector, postSale } from 'src/services/clientService';
 import { LETTER, NUMBER, SEPARATOR } from 'src/util/consts';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import Stack from '@mui/material/Stack';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
+import { formatdate } from 'src/util/formatDate';
 
 interface props {
   value: boolean;
   showModal(value: any): void;
 }
 export const Modal: React.FC<props> = ({ value, showModal }) => {
-  const [error, setError] = useState({ code: null, error: false });
+  const [error, setError] = useState({
+    code: null,
+    error: false,
+    status: null
+  });
   const [age, setAge] = useState('');
   const [data, setData] = useState<any>();
   useEffect(() => {
@@ -44,17 +55,19 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
   const [user, setUser] = useState<Sale>({
     nombre: '',
     apellido: '',
-    telefono: '099999999',
-    abono: 0,
-    total: 0,
-    cedula: '2300000000',
-    id_Sector: null
+    telefono: '',
+    correo: '',
+    cedula: '',
+    fechaNacimiento: '',
+    fechaInicio: '',
+    id_Suscripcion: null
   });
   const insertTarget = () => {
-    postSale(user).then((status) => {
+    postSale(user).then(({ status, data }) => {
+      console.log(data, status);
       setError(
         status === 200
-          ? { ...error, code: 200, error: false }
+          ? { ...error, code: 200, error: false, status: data.code }
           : { ...error, error: true }
       );
     });
@@ -65,25 +78,51 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
         ...user,
         nombre: '',
         apellido: '',
-        telefono: '099999999',
-        cedula: '2300000000',
-        total: 0,
-        abono: 0
+        telefono: '',
+        correo: '',
+        cedula: '',
+        fechaNacimiento: '',
+        fechaInicio: '',
+        
       });
       setTimeout(() => {
-        setError({ ...error, code: null });
+        setError({ ...error, code: null, status });
       }, 10000);
     }
   }, [error.code]);
-  console.log(user,user.nombre);
+
+  const [birthay, setBirthay] = useState<any>();
+  const onChange = (newValue: Dayjs | null) => {
+    setBirthay(newValue);
+    setUser({
+      ...user,
+      fechaNacimiento: formatdate(
+        new Date(newValue.toString()).toLocaleDateString('en-US')
+      )
+    });
+  };
+  const [dateInitial, setDateInitial] = useState<any>();
+  const onChangeDateInitial = (newValue: Dayjs | null) => {
+    setDateInitial(newValue);
+    console.log(formatdate(
+      new Date(newValue.toString()).toLocaleDateString('en-US')
+    ))
+    setUser({
+      ...user,
+      fechaInicio: formatdate(
+        new Date(newValue.toString()).toLocaleDateString('en-US')
+      )
+    });
+  };
+
   return (
     <div>
       <Dialog open={value} onClose={handleClose}>
-        <DialogTitle>Ingresar Nueva Venta</DialogTitle>
+        <DialogTitle>Ingresar un nuevo cliente</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Ingresa una nueva venta, no olvides de agregar el Sector cuando des
-            click en "Ingresar" podras volver a ingresar mas ventas.
+            Ingresa una nuevo cliente, no olvides de agregar la suscripcion
+            cuando des click en "Ingresar" podras volver a ingresar mas ventas.
           </DialogContentText>
 
           <div>
@@ -99,7 +138,7 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
                 {data?.map((data: any, index: number) => (
                   <MenuItem
                     onClick={() =>
-                      setUser({ ...user, id_Sector: data.idSector })
+                      setUser({ ...user, id_Suscripcion: data.idSuscripcion })
                     }
                     key={index}
                     value={index}
@@ -109,120 +148,141 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
                 ))}
               </Select>
             </FormControl>
+            <Grid container spacing={2}>
+            <Grid item xs={6}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Stack spacing={3}>
+                    <DesktopDatePicker
+                      disableFuture
+                      label="Fecha de nacimiento"
+                      inputFormat="MM/DD/YYYY"
+                      value={dateInitial}
+                      onChange={onChangeDateInitial}
+                      renderInput={(params) => (
+                        <TextField
+                          style={{ marginTop: '8px' }}
+                          variant="standard"
+                          {...params}
+                        />
+                      )}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Nombre"
+                  type="text"
+                  value={user.nombre}
+                  inputProps={{
+                    maxLength: 50
+                  }}
+                  fullWidth
+                  variant="standard"
+                  onChange={(e) =>
+                    LETTER.test(e.target.value) &&
+                    setUser({ ...user, nombre: e.target.value })
+                  }
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  margin="dense"
+                  id="lastname"
+                  label="Apellido"
+                  type="text"
+                  fullWidth
+                  value={user.apellido}
+                  inputProps={{
+                    maxLength: 50
+                  }}
+                  variant="standard"
+                  onChange={(e) =>
+                    LETTER.test(e.target.value) &&
+                    setUser({ ...user, apellido: e.target.value })
+                  }
+                />
+              </Grid>
 
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Nombre"
-              type="text"
-              value={user.nombre}
-              inputProps={{
-                maxLength: 50
-              }}
-              fullWidth
-              variant="standard"
-              onChange={(e) =>
-                (LETTER.test(e.target.value)) &&
-                setUser({ ...user, nombre: e.target.value })
-              }
-            />
-            <TextField
-              margin="dense"
-              id="name"
-              label="Apellido"
-              type="text"
-              fullWidth
-              value={user.apellido}
-              inputProps={{
-                maxLength: 50
-              }}
-              variant="standard"
-              onChange={(e) =>
-                (LETTER.test(e.target.value)) &&
-                setUser({ ...user, apellido: e.target.value })
-              }
-            />
-            <TextField
-              margin="dense"
-              id="name"
-              label="Cedula"
-              type="text"
-              inputProps={{
-                maxLength: 10
-              }}
-              fullWidth
-              value={user.cedula}
-              variant="standard"
-              onChange={(e) =>
-                (NUMBER.test(e.target.value) || e.target.value === '') &&
-                setUser({ ...user, cedula: e.target.value })
-              }
-            />
-
-            <TextField
-              margin="dense"
-              id="name"
-              label="Telefono"
-              type="text"
-              inputProps={{
-                maxLength: 10
-              }}
-              fullWidth
-              value={user.telefono}
-              variant="standard"
-              onChange={(e) =>
-                (NUMBER.test(e.target.value) || e.target.value === '') &&
-                setUser({ ...user, telefono: e.target.value })
-              }
-            />
-
-            <TextField
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">$</InputAdornment>
-                )
-              }}
-              margin="dense"
-              id="name"
-              label="Total"
-              type="number"
-              fullWidth
-              value={user.total.toString()}
-              onChange={(e) =>
-                (SEPARATOR.test(e.target.value) ||
-                  Number(e.target.value) === 0) &&
-                setUser({ ...user, total: Number(e.target.value) })
-              }
-              inputProps={{
-                min: 0
-              }}
-              variant="standard"
-            />
-            <TextField
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">$</InputAdornment>
-                )
-              }}
-              error={user.abono <= user.total ? false : true}
-              helperText="El abono no puede ser mayor que el total"
-              margin="dense"
-              id="name"
-              label="Abono"
-              type="number"
-              fullWidth
-              value={user.abono.toString()}
-              onChange={(e) =>
-                (SEPARATOR.test(e.target.value) ||
-                  Number(e.target.value) === 0) &&
-                setUser({ ...user, abono: Number(e.target.value) })
-              }
-              variant="standard"
-              inputProps={{
-                min: 0
-              }}
-            />
+              <Grid item xs={6}>
+                <TextField
+                  margin="dense"
+                  id="identification"
+                  label="Cedula"
+                  type="text"
+                  inputProps={{
+                    maxLength: 10
+                  }}
+                  fullWidth
+                  value={user.cedula}
+                  variant="standard"
+                  onChange={(e) =>
+                    (NUMBER.test(e.target.value) || e.target.value === '') &&
+                    setUser({ ...user, cedula: e.target.value })
+                  }
+                />
+              </Grid>
+              <Grid item xs={6}>
+                {' '}
+                <TextField
+                  margin="dense"
+                  id="phone"
+                  label="Telefono"
+                  type="text"
+                  inputProps={{
+                    maxLength: 10
+                  }}
+                  fullWidth
+                  value={user.telefono}
+                  variant="standard"
+                  onChange={(e) =>
+                    (NUMBER.test(e.target.value) || e.target.value === '') &&
+                    setUser({ ...user, telefono: e.target.value })
+                  }
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  margin="dense"
+                  id="mail"
+                  label="Correo"
+                  type="text"
+                  inputProps={{
+                    maxLength: 40
+                  }}
+                  fullWidth
+                  value={user.correo}
+                  variant="standard"
+                  onChange={(e) =>
+                    // LETTER.test(e.target.value) &&
+                    setUser({ ...user, correo: e.target.value })
+                  }
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Stack spacing={3}>
+                    <DesktopDatePicker
+                      disableFuture
+                      label="Fecha de nacimiento"
+                      inputFormat="MM/DD/YYYY"
+                      value={birthay}
+                      onChange={onChange}
+                      renderInput={(params) => (
+                        <TextField
+                          style={{ marginTop: '8px' }}
+                          variant="standard"
+                          {...params}
+                        />
+                      )}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+              </Grid>
+            </Grid>
           </div>
           {error.error ? (
             <Alert severity="error">
@@ -232,7 +292,17 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
           ) : (
             ''
           )}
-          {error.code === 200 ? (
+
+          {error.status === '100' ? (
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              El usuario ya se encuentra registrado{' '}
+              <strong>Vuelve a reintentar</strong>
+            </Alert>
+          ) : (
+            ''
+          )}
+          {(error.code && error.status) === '200' ? (
             <Alert severity="success">
               <AlertTitle>Éxito</AlertTitle>
               El registro se ingreso de manera correcta{' '}
@@ -247,11 +317,12 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
           <Button
             disabled={
               user.nombre &&
-              user.total &&
+              user.telefono &&
               user.cedula &&
               user.apellido &&
-              user.id_Sector &&
-              user.abono <= user.total
+              user.id_Suscripcion &&
+              user.correo &&
+              user.fechaNacimiento
                 ? false
                 : true
             }

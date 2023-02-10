@@ -5,7 +5,9 @@ import {
   Card,
   Box,
   Divider,
-  Button
+  Button,
+  TextField,
+  Container
 } from '@mui/material';
 
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
@@ -26,7 +28,7 @@ function EditProfileTab() {
           >
             <Box>
               <Typography variant="h4" gutterBottom>
-                Personal Details
+                Datos Personales
               </Typography>
               <Typography variant="subtitle2">
                 Manage informations related to your personal details
@@ -37,105 +39,86 @@ function EditProfileTab() {
             </Button>
           </Box>
           <Divider />
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="subtitle2">
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    Name:
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                  <Text color="black">
-                    <b>Craig Donin</b>
-                  </Text>
-                </Grid>
-                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    Date of birth:
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                  <Text color="black">
-                    <b>15 March 1977</b>
-                  </Text>
-                </Grid>
-                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    Address:
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                  <Box sx={{ maxWidth: { xs: 'auto', sm: 300 } }}>
-                    <Text color="black">
-                      1749 High Meadow Lane, SEQUOIA NATIONAL PARK, California,
-                      93262
-                    </Text>
-                  </Box>
-                </Grid>
-              </Grid>
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item xs={12}>
-        <Card>
-          <Box
-            p={3}
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Box>
-              <Typography variant="h4" gutterBottom>
-                Account Settings
-              </Typography>
+          <div style={{ display: 'flex' }}>
+            <CardContent sx={{ p: 4 }}>
               <Typography variant="subtitle2">
-                Manage details related to your account
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                    <Box pr={3} pb={2} mt={2}>
+                      Nombre:
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={8} md={9}>
+                    <Text color="black">
+                      <TextField
+                        // style={{width:'150px'}}
+                        id="standard-basic"
+                        label="Standard"
+                        variant="standard"
+                      />
+                    </Text>
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                    <Box pr={3} pb={2} mt={2}>
+                      Cedula:
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={8} md={9}>
+                    <Text color="black">
+                      <Text color="black">
+                        <TextField
+                          id="standard-basic"
+                          label="Standard"
+                          variant="standard"
+                        />
+                        <Box pl={1} component="span">
+                          <Label marginTop="15px" color="success">
+                            Importante
+                          </Label>
+                        </Box>
+                      </Text>
+                    </Text>
+                  </Grid>
+                </Grid>
               </Typography>
-            </Box>
-            <Button variant="text" startIcon={<EditTwoToneIcon />}>
-              Edit
-            </Button>
-          </Box>
-          <Divider />
-          <CardContent sx={{ p: 4 }}>
-            <Typography variant="subtitle2">
-              <Grid container spacing={0}>
-                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    Language:
-                  </Box>
+            </CardContent>
+            <CardContent sx={{ p: 4 }}>
+              <Typography variant="subtitle2">
+                <Grid container spacing={0}>
+                  <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                    <Box pr={3} pb={2} mt={2}>
+                      Name:
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={8} md={9}>
+                    <Text color="black">
+                      <TextField
+                        id="standard-basic"
+                        label="Standard"
+                        variant="standard"
+                      />
+                    </Text>
+                  </Grid>
+                  <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                    <Box pr={3} pb={2} mt={2}>
+                      Date of birth:
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={8} md={9}>
+                    <Text color="black">
+                      <Text color="black">
+                        <TextField
+                          id="standard-basic"
+                          label="Standard"
+                          variant="standard"
+                        />
+                      </Text>
+                    </Text>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                  <Text color="black">
-                    <b>English (US)</b>
-                  </Text>
-                </Grid>
-                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    Timezone:
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                  <Text color="black">
-                    <b>GMT +2</b>
-                  </Text>
-                </Grid>
-                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    Account status:
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                  <Label color="success">
-                    <DoneTwoToneIcon fontSize="small" />
-                    <b>Active</b>
-                  </Label>
-                </Grid>
-              </Grid>
-            </Typography>
-          </CardContent>
+              </Typography>
+            </CardContent>
+          </div>
         </Card>
       </Grid>
       <Grid item xs={12}>
@@ -148,7 +131,7 @@ function EditProfileTab() {
           >
             <Box>
               <Typography variant="h4" gutterBottom>
-                Email Addresses
+                Datos de contacto
               </Typography>
               <Typography variant="subtitle2">
                 Manage details related to your associated email addresses
@@ -163,26 +146,138 @@ function EditProfileTab() {
             <Typography variant="subtitle2">
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    Email ID:
+                  <Box pr={3} pb={2} mt={2}>
+                    Telefono:
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
                   <Text color="black">
-                    <b>example@demo.com</b>
+                    <Text color="black">
+                      <TextField
+                        id="standard-basic"
+                        label="Standard"
+                        variant="standard"
+                      />
+                      <Box pl={1} component="span">
+                        <Label marginTop="15px" color="success">
+                          Importante
+                        </Label>
+                      </Box>
+                    </Text>
                   </Text>
-                  <Box pl={1} component="span">
-                    <Label color="success">Primary</Label>
-                  </Box>
                 </Grid>
                 <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    Email ID:
+                  <Box pr={3} pb={2} mt={2}>
+                    Correo:
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
                   <Text color="black">
-                    <b>demo@example.com</b>
+                    <Text color="black">
+                      <TextField
+                        id="standard-basic"
+                        label="Standard"
+                        variant="standard"
+                      />
+                    </Text>
+                  </Text>
+                </Grid>
+                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                  <Box pr={3} pb={2} mt={2}>
+                    Direccion:
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={8} md={9}>
+                  <Text color="black">
+                    <Text color="black">
+                      <TextField
+                        id="standard-basic"
+                        label="Standard"
+                        variant="standard"
+                      />
+                    </Text>
+                  </Text>
+                </Grid>
+              </Grid>
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12}>
+        <Card>
+          <Box
+            p={3}
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Box>
+              <Typography variant="h4" gutterBottom>
+                Datos fisicos
+              </Typography>
+              <Typography variant="subtitle2">
+                Manage details related to your associated email addresses
+              </Typography>
+            </Box>
+            <Button variant="text" startIcon={<EditTwoToneIcon />}>
+              Edit
+            </Button>
+          </Box>
+          <Divider />
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant="subtitle2">
+              <Grid container spacing={0}>
+                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                  <Box pr={3} pb={2} mt={2}>
+                    Peso:
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={8} md={9}>
+                  <Text color="black">
+                    <Text color="black">
+                      <TextField
+                        id="standard-basic"
+                        label="Standard"
+                        variant="standard"
+                      />
+                      <Box pl={1} component="span">
+                        <Label marginTop="15px" color="success">
+                          Importante
+                        </Label>
+                      </Box>
+                    </Text>
+                  </Text>
+                </Grid>
+                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                  <Box pr={3} pb={2} mt={2}>
+                    Altura:
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={8} md={9}>
+                  <Text color="black">
+                    <Text color="black">
+                      <TextField
+                        id="standard-basic"
+                        label="Standard"
+                        variant="standard"
+                      />
+                    </Text>
+                  </Text>
+                </Grid>
+                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
+                  <Box pr={3} pb={2} mt={2}>
+                    Peso Deseado:
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={8} md={9}>
+                  <Text color="black">
+                    <Text color="black">
+                      <TextField
+                        id="standard-basic"
+                        label="Standard"
+                        variant="standard"
+                      />
+                    </Text>
                   </Text>
                 </Grid>
               </Grid>

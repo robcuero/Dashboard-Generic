@@ -15,10 +15,13 @@ import ArrowBackTwoToneIcon from '@mui/icons-material/ArrowBackTwoTone';
 import ArrowForwardTwoToneIcon from '@mui/icons-material/ArrowForwardTwoTone';
 import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
+import { useState } from 'react';
 
 const Input = styled('input')({
   display: 'none'
 });
+
+
 
 const AvatarWrapper = styled(Card)(
   ({ theme }) => `
@@ -60,27 +63,13 @@ const ButtonUploadWrapper = styled(Box)(
 `
 );
 
-const CardCover = styled(Card)(
-  ({ theme }) => `
-    position: relative;
-
-    .MuiCardMedia-root {
-      height: ${theme.spacing(26)};
-    }
-`
-);
-
-const CardCoverAction = styled(Box)(
-  ({ theme }) => `
-    position: absolute;
-    right: ${theme.spacing(2)};
-    bottom: ${theme.spacing(2)};
-`
-);
 
 const ProfileCover = ({ user }) => {
+
+
   return (
     <>
+
       <Box display="flex" mb={3}>
         <Tooltip arrow placement="top" title="Go back">
           <IconButton color="primary" sx={{ p: 2, mr: 2 }}>
@@ -89,14 +78,14 @@ const ProfileCover = ({ user }) => {
         </Tooltip>
         <Box>
           <Typography variant="h3" component="h3" gutterBottom>
-            Profile for {user.name}
+            Perfil de {user.name}
           </Typography>
           <Typography variant="subtitle2">
-            This is a profile page. Easy to modify, always blazing fast
+          Esta es una página de perfil. Fácil de modificar, siempre ultrarrápido
           </Typography>
         </Box>
       </Box>
-      <CardCover>
+      {/* <CardCover>
         <CardMedia image={user.coverImg} />
         <CardCoverAction>
           <Input accept="image/*" id="change-cover" multiple type="file" />
@@ -110,8 +99,8 @@ const ProfileCover = ({ user }) => {
             </Button>
           </label>
         </CardCoverAction>
-      </CardCover>
-      <AvatarWrapper>
+      </CardCover> */}
+      <AvatarWrapper style={{marginTop:'0px'}}>
         <Avatar variant="rounded" alt={user.name} src={user.avatar} />
         <ButtonUploadWrapper>
           <Input

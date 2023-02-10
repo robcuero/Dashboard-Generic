@@ -15,11 +15,13 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import React, { useEffect, useState } from 'react';
 import { getSector, getUser } from '../../../../services/clientService';
-import { DataGrid, GridCellParams, GridSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
 import './index.css';
 import { GridColDef } from '@mui/x-data-grid';
 import { ModalEdit } from 'src/components/ModalEdit';
 import { ModalDelete } from 'src/components/ModalDelete';
+import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
+
 export const Tables = () => {
   const [data, setData] = useState<any>();
   const [user, setUser] = useState<any>([]);
@@ -27,7 +29,6 @@ export const Tables = () => {
   const [age, setAge] = useState('');
   const [selectTarget, setSelectTarget] = useState<any>([]);
   const [sector, setSector] = useState<string>();
-
   useEffect(() => {
     getSector().then((res) => {
       setData(res);
@@ -46,21 +47,19 @@ export const Tables = () => {
     setAge(event.target.value as string);
   };
 
+  const navigate = useNavigate();
+  const toDescription = () => {
+    navigate('/management/profile/settings', {
+      replace: true,
+      state: { idUser: selectTarget[0].id }
+    });
+  };
+
   const Edit = () => {
     return (
       <div>
         <Tooltip title="Edit Order" arrow>
-          <IconButton
-            onClick={() => showModalEdit(true)}
-            sx={{
-              '&:hover': {
-                background: theme.colors.primary.lighter
-              },
-              color: theme.palette.primary.main
-            }}
-            color="inherit"
-            size="small"
-          >
+          <IconButton onClick={toDescription} color="inherit" size="small">
             <EditTwoToneIcon fontSize="small" />
           </IconButton>
         </Tooltip>
@@ -111,13 +110,6 @@ export const Tables = () => {
       width: 150,
       editable: false
     },
-    ,
-    {
-      field: 'cedula',
-      headerName: 'Cedula',
-      width: 150,
-      editable: false
-    },
     {
       field: 'telefono',
       headerName: 'Telefono',
@@ -125,51 +117,68 @@ export const Tables = () => {
       editable: false
     },
     {
-      field: 'total',
-      headerName: 'Total',
-      type: 'number',
-      width: 120,
-      valueFormatter: ({ value }) => `$ ${value}`,
+      field: 'cedula',
+      headerName: 'Cedula',
+      width: 200,
       editable: false
     },
+
     {
-      field: 'abono',
-      headerName: 'Abonos',
-      type: 'number',
-      width: 100,
+      field: 'fechaInicio',
+      headerName: 'Inicio',
+      width: 150,
       editable: false,
-      valueFormatter: ({ value }) => `$ ${value}`
+      renderCell({ row }) {
+        let date = new Date(row.fechaInicio).toLocaleDateString('en-US');
+        return <div>{date}</div>;
+      }
     },
+
     {
-      field: 'subtotal',
-      headerName: 'Subtotal',
-      type: 'number',
-      width: 100,
-      valueFormatter: ({ value }) => `$ ${value}`,
-      editable: false
-    },
-    ,
-    {
-      field: 'fecha',
-      headerName: 'Fecha',
+      field: 'fechaFin',
+      headerName: 'Fin',
       type: 'date',
-      width: 120,
+      width: 150,
       editable: false,
-      cellClassName: (params: GridCellParams<number>) => {
-        if (params.value == null) {
+      renderCell({ row }) {
+        let date = new Date(row.fechaFin).toLocaleDateString('en-US');
+        return <div>{date}</div>;
+      }
+    },
+    {
+      field: 'Status',
+      headerName: 'Status',
+      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      editable: false,
+      cellClassName: ({ row }) => {
+        if (row.fechaFin == null) {
           return '';
         }
-
+        let total =
+          (new Date(row.fechaFin).getTime() - today.getTime()) /
+          (1000 * 60 * 60 * 24);
         return clsx('super-app', {
           positive:
-            (today.getTime() - new Date(params.value).getTime()) /
-              (1000 * 60 * 60 * 24) <
-            7,
-          negative:
-            (today.getTime() - new Date(params.value).getTime()) /
-              (1000 * 60 * 60 * 24) >
-            7
+            (total > 3 && (sector === '2' || sector === '3')) ||
+            (sector === '1' && total > 0),
+          negative: total < 0,
+          alert: total < 3 && total > 0 && (sector === '2' || sector === '3')
         });
+      },
+      renderCell({ row }) {
+        return (
+          <div>
+            {(new Date(row.fechaFin).getTime() - today.getTime()) /
+              (1000 * 60 * 60 * 24) >
+            0 ? (
+              <div>Activo</div>
+            ) : (
+              <div>Inactivo</div>
+            )}
+          </div>
+        );
       }
     },
     {
@@ -196,12 +205,12 @@ export const Tables = () => {
           }}
           variant="h4"
         >
-
-          {user.length>0 ? `Esta ruta tiene ${user.length} tarjetas`:' Escoje un sector que tenga ventas'}
-         
+          {user.length > 0
+            ? `Esta suscripciones tiene ${user.length} personas`
+            : ' Escoje una opcion con suscripciones'}
         </Typography>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Sector</InputLabel>
+          <InputLabel id="demo-simple-select-label">Suscripcion</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -213,7 +222,7 @@ export const Tables = () => {
               <MenuItem
                 key={index}
                 value={index}
-                onClick={() => getUserFilter(data.idSector)}
+                onClick={() => getUserFilter(data.idSuscripcion)}
               >
                 {data.nombre}
               </MenuItem>
@@ -232,6 +241,11 @@ export const Tables = () => {
           },
           '& .super-app.negative': {
             backgroundColor: '#d47483',
+            color: '#1a3e72',
+            fontWeight: '600'
+          },
+          '& .super-app.alert': {
+            backgroundColor: '#f2ed82',
             color: '#1a3e72',
             fontWeight: '600'
           }
@@ -274,3 +288,6 @@ export const Tables = () => {
     </div>
   );
 };
+function Loader(arg0: any) {
+  throw new Error('Function not implemented.');
+}

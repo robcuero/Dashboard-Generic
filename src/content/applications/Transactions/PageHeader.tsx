@@ -1,17 +1,13 @@
-import {
-  Typography,
-  Button,
-  Grid,
-} from '@mui/material';
+import { Typography, Button, Grid } from '@mui/material';
 
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import {useState } from 'react';
+import { useState } from 'react';
 import { Modal } from 'src/components/ModalCreate';
 
 function PageHeader() {
   const info = {
     name: sessionStorage.getItem('user'),
-    avatar:  `https://localhost:44396/files/${sessionStorage.getItem("img")}.png`
+    avatar: `https://localhost:44396/files/${sessionStorage.getItem('img')}.png`
   };
   const [open, setOpen] = useState(false);
   const showModal = (value: boolean) => {
@@ -22,7 +18,7 @@ function PageHeader() {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          Ventas Por Sectores
+          Suscripciones 
         </Typography>
         <Typography variant="subtitle2">
           {info.name}, estas son las transacciones recientes

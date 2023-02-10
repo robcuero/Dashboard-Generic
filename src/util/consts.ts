@@ -15,22 +15,22 @@ export const columns: GridColDef[] = [
 		editable: true
 	},
 	{
-		field: 'total',
-		headerName: 'Total',
+		field: 'telefono',
+		headerName: 'Telefono',
 		type: 'number',
 		width: 150,
 		editable: true
 	},
 	{
-		field: 'abono',
-		headerName: 'Abonos',
+		field: 'fechaInicio',
+		headerName: 'Inicio',
 		type: 'number',
 		width: 150,
 		editable: true
 	},
 	{
-		field: 'subtotal',
-		headerName: 'Subtotal',
+		field: 'fechaFin',
+		headerName: 'Fin',
 		type: 'number',
 		width: 150,
 		editable: true
