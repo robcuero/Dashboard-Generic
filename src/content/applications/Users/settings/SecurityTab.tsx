@@ -11,7 +11,6 @@ import {
   Button,
   ListItemAvatar,
   Avatar,
-  Switch,
   CardHeader,
   Tooltip,
   IconButton,
@@ -23,12 +22,16 @@ import {
   TableRow,
   TableContainer,
   useTheme,
-  styled,
+  styled
 } from '@mui/material';
 
 import DoneTwoToneIcon from '@mui/icons-material/DoneTwoTone';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { format, subHours, subWeeks, subDays } from 'date-fns';
+import { statusUser } from 'src/util/status';
+import { formatdate } from 'src/util/formatDate';
+import { ModalActive } from 'src/components/ModalActiveSuscription';
+import { ModalDeleteSuscription } from 'src/components/ModalDeleteSus';
 
 const ButtonError = styled(Button)(
   ({ theme }) => `
@@ -41,6 +44,17 @@ const ButtonError = styled(Button)(
     `
 );
 
+const ButtonSuccess = styled(Button)(
+  ({ theme }) => `
+     background: ${theme.colors.success.main};
+     color: ${theme.palette.success.contrastText};
+
+     &:hover {
+        background: ${theme.colors.success.dark};
+     }
+    `
+);
+
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
     background: ${theme.colors.success.light};
@@ -49,71 +63,42 @@ const AvatarSuccess = styled(Avatar)(
 `
 );
 
-const AvatarWrapper = styled(Avatar)(
+const AvatarError = styled(Avatar)(
   ({ theme }) => `
+    background: ${theme.colors.error.main};
     width: ${theme.spacing(5)};
     height: ${theme.spacing(5)};
 `
 );
 
-function SecurityTab() {
+function SecurityTab(user) {
   const theme = useTheme();
-
   const [page, setPage] = useState(2);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  const [openDeleteSus, setOpenDeleteSus] = useState(false);
+  const status = statusUser(user.user.suscripciones[0].fechaFin);
+  const idSuscripcion = user.user.suscripciones[0].idUsuarioSuscripcion;
+  console.log(idSuscripcion);
   const handleChangePage = (
     event: MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
   };
+  const showModalDelete = (value: boolean) => {
+    setOpenDeleteSus(value);
+  };
 
   const handleChangeRowsPerPage = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, 5));
     setPage(0);
   };
-
-  const logs = [
-    {
-      id: 1,
-      browser: ' Safari/537.36',
-      ipaddress: '3.70.73.142',
-      location: 'United States',
-      date: subDays(new Date(), 2).getTime()
-    },
-    {
-      id: 2,
-      browser: 'Chrome/36.0.1985.67',
-      ipaddress: '138.13.136.179',
-      location: 'China',
-      date: subDays(new Date(), 6).getTime()
-    },
-    {
-      id: 3,
-      browser: 'Googlebot/2.1',
-      ipaddress: '119.229.170.253',
-      location: 'China',
-      date: subHours(new Date(), 15).getTime()
-    },
-    {
-      id: 4,
-      browser: 'AppleWebKit/535.1',
-      ipaddress: '206.8.99.49',
-      location: 'Philippines',
-      date: subDays(new Date(), 4).getTime()
-    },
-    {
-      id: 5,
-      browser: 'Mozilla/5.0',
-      ipaddress: '235.40.59.85',
-      location: 'China',
-      date: subWeeks(new Date(), 3).getTime()
-    }
-  ];
-
+  const [openDelete, setOpenDelete] = useState(false);
+  const showModalActive = (value: boolean) => {
+    setOpenDelete(value);
+  };
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -123,16 +108,21 @@ function SecurityTab() {
             Manage connected social accounts options
           </Typography>
         </Box>
-
       </Grid>
       <Grid item xs={12}>
         <Card>
           <List>
             <ListItem sx={{ p: 3 }}>
               <ListItemAvatar sx={{ pr: 2 }}>
-                <AvatarSuccess>
-                  <DoneTwoToneIcon />
-                </AvatarSuccess>
+                {status ? (
+                  <AvatarSuccess>
+                    <DoneTwoToneIcon />
+                  </AvatarSuccess>
+                ) : (
+                  <AvatarError>
+                    <CloseOutlinedIcon />
+                  </AvatarError>
+                )}
               </ListItemAvatar>
               <ListItemText
                 primaryTypographyProps={{ variant: 'h5', gutterBottom: true }}
@@ -140,15 +130,39 @@ function SecurityTab() {
                   variant: 'subtitle2',
                   lineHeight: 1
                 }}
-                primary="Activo"
-                secondary="Finaliza el 2002-22-22"
+                primary={status ? 'Activo' : 'Inactivo'}
+                secondary={formatdate(user.user.suscripciones[0].fechaFin)}
               />
-              <ButtonError size="large" variant="contained">
-                Finalizar Suscripcion
-              </ButtonError>
+              {status ? (
+                <ButtonError
+                  size="large"
+                  variant="contained"
+                  onClick={() => showModalDelete(true)}
+                >
+                  Finalizar Suscripcion
+                </ButtonError>
+              ) : (
+                <ButtonSuccess
+                  size="large"
+                  variant="contained"
+                  onClick={() => showModalActive(true)}
+                >
+                  Activar Suscripcion
+                </ButtonSuccess>
+              )}
+              <ModalDeleteSuscription
+                showModal={showModalDelete}
+                value={openDeleteSus}
+                id={idSuscripcion}
+                // updateUser={getUserFilter}
+                // sector={sector}
+              />
+              <ModalActive
+                showModal={showModalActive}
+                value={openDelete}
+                id={user.user.cliente[0].idCliente}
+              />
             </ListItem>
-     
-
           </List>
         </Card>
       </Grid>
@@ -166,24 +180,23 @@ function SecurityTab() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Suscripcion</TableCell>
-                  <TableCell>Monto</TableCell>
-                  <TableCell>Fecha inicio</TableCell>
-                  <TableCell>Fecha fin</TableCell>
-              
-                  <TableCell align="right">Actions</TableCell>
+                  {/* <TableCell>Id</TableCell> */}
+                  <TableCell align="center">Fecha inicio</TableCell>
+                  <TableCell align="center">Fecha fin</TableCell>
+                  <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {logs.map((log) => (
-                  <TableRow key={log.id} hover>
-                    <TableCell>{log.browser}</TableCell>
-                    <TableCell>{log.ipaddress}</TableCell>
-                    <TableCell>{log.location}</TableCell>
-                    <TableCell>
-                      {format(log.date, 'dd MMMM, yyyy - h:mm:ss a')}
+                {user.user.suscripciones.map((log, item) => (
+                  <TableRow key={item} hover>
+                    <TableCell align="center">
+                      {formatdate(log.fechaInicio)}
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
+                      {' '}
+                      {formatdate(log.fechaFin)}
+                    </TableCell>
+                    <TableCell align="center">
                       <Tooltip placement="top" title="Delete" arrow>
                         <IconButton
                           sx={{
@@ -204,7 +217,7 @@ function SecurityTab() {
               </TableBody>
             </Table>
           </TableContainer>
-          <Box p={2}>
+          <Box p={3}>
             <TablePagination
               component="div"
               count={100}

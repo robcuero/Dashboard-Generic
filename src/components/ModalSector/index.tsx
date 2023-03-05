@@ -16,8 +16,8 @@ import {
   TextField
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Sale, Sector } from 'src/interface';
-import { getSector, postSale, postSector } from 'src/services/clientService';
+import { Sector } from 'src/interface';
+import { postSector } from 'src/services/clientService';
 import { LETTER, NUMBER, SEPARATOR } from 'src/util/consts';
 
 interface props {

@@ -23,10 +23,11 @@ import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwo
 import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
 import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
 import { MenuWrapper, SubItemMenuWrapper, SubMenuWrapper } from './style';
+import { useSelector } from 'react-redux';
 
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
-
+  const { userDetail } = useSelector((state: any) => state.structure);
   return (
     <>
       <MenuWrapper>
@@ -105,21 +106,24 @@ function SidebarMenu() {
               </ListItem>
             </List>
           </SubMenuWrapper>
-          <SubItemMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/management/transactions"
-                  startIcon={<TableChartTwoToneIcon />}
-                >
-                  User Detail
-                </Button>
-              </ListItem>
-            </List>
-          </SubItemMenuWrapper>
+
+          {userDetail && (
+            <SubItemMenuWrapper>
+              <List component="div">
+                <ListItem component="div">
+                  <Button
+                    disableRipple
+                    component={RouterLink}
+                    onClick={closeSidebar}
+                    to="/management/profile/settings"
+                    startIcon={<AccountCircleTwoToneIcon />}
+                  >
+                    Detalle de Usuario
+                  </Button>
+                </ListItem>
+              </List>
+            </SubItemMenuWrapper>
+          )}
         </List>
         <List
           component="div"
@@ -140,17 +144,6 @@ function SidebarMenu() {
                   startIcon={<AccountCircleTwoToneIcon />}
                 >
                   User Profile
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/management/profile/settings"
-                  startIcon={<DisplaySettingsTwoToneIcon />}
-                >
-                  Account Settings
                 </Button>
               </ListItem>
             </List>

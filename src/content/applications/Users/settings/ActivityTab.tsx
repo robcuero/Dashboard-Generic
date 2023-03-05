@@ -17,6 +17,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import ArrowBackTwoToneIcon from '@mui/icons-material/ArrowBackTwoTone';
 import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import RecentActivity from './RecentActivity';
+import { formatdate } from 'src/util/formatDate';
 
 const Input = styled('input')({
   display: 'none'
@@ -63,8 +64,7 @@ const ButtonUploadWrapper = styled(Box)(
 );
 
 function ActivityTab(resume: any) {
-debugger
-  const client = resume.resume[0]
+  const client = resume.resume[0];
   return (
     <>
       <Container sx={{ mt: 3 }} maxWidth="lg">
@@ -84,7 +84,7 @@ debugger
               </Tooltip>
               <Box>
                 <Typography variant="h3" component="h3" gutterBottom>
-                  Perfil de {client.nombre} 
+                  Perfil de {client.nombre}
                 </Typography>
                 <Typography variant="subtitle2">
                   Esta es una página de perfil. Fácil de modificar, siempre
@@ -108,7 +108,7 @@ debugger
   </CardCoverAction>
 </CardCover> */}
             <AvatarWrapper style={{ marginTop: '0px' }}>
-              <Avatar variant="rounded" alt={'user.name'} src={'user.avatar'} />
+              <Avatar variant="rounded" alt={'https://citygymdoha.com/wp-content/uploads/2018/12/aby.jpg'} src={'https://citygymdoha.com/wp-content/uploads/2018/12/aby.jpg'} />
               <ButtonUploadWrapper>
                 <Input
                   accept="image/*"
@@ -168,7 +168,7 @@ debugger
                   variant="subtitle2"
                   color="text.primary"
                 >
-                  {client.telefono}  | {client.correo}{' '}
+                  {client.telefono} | {client.correo}{' '}
                 </Typography>
               </Box>
 
@@ -197,7 +197,7 @@ debugger
                   variant="subtitle2"
                   color="text.primary"
                 >
-                  {client.fechaNacimiento}
+                  {formatdate(client.fechaNacimiento)}
                 </Typography>
               </Box>
 
@@ -217,7 +217,7 @@ debugger
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <RecentActivity />
+            <RecentActivity resume={client} />
           </Grid>
         </Grid>
       </Container>

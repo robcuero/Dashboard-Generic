@@ -2,13 +2,19 @@
 import { Sale, Sector } from 'src/interface';
 import api from '../services/api/jericoApi';
 
-export const getSector = async () => {
+export const getPromocion = async () => {
+  try {
+    const { data } = await api.get('/Promocion');
+    return data;
+  } catch (error) {}
+};
+
+export const getSuscripcion = async () => {
   try {
     const { data } = await api.get('/Suscripcion');
     return data;
   } catch (error) {}
 };
-
 
 export const postSector = async (target: Sector) => {
   try {
@@ -60,6 +66,16 @@ export const deleteTarget = async (id: any) => {
     return error.code;
   }
 };
+
+export const deleteSuscription= async (id: any) => {
+  try {
+    const { status } = await api.delete(`/UsuarioSuscripcion/deleteSuscription/${id}`);
+    return status;
+  } catch (error) {
+    return error.code;
+  }
+};
+
 
 export const login = async (user: any) => {
   try {

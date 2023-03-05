@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Sale } from 'src/interface';
-import { getSector, postEdit } from 'src/services/clientService';
+import { getSuscripcion, postEdit } from 'src/services/clientService';
 import { LETTER, NUMBER, SEPARATOR } from 'src/util/consts';
 
 interface props {
@@ -41,7 +41,7 @@ export const ModalEdit: React.FC<props> = ({
   const [data, setData] = useState<any>();
 
   useEffect(() => {
-    getSector().then((res) => {
+    getSuscripcion().then((res) => {
       setData(res);
     });
     // eslint-disable-next-line
@@ -93,12 +93,11 @@ export const ModalEdit: React.FC<props> = ({
         nombre: user.nombre,
         apellido: user.apellido,
         telefono: user.telefono,
-        cedula: user.cedula,
+        cedula: user.cedula
       });
       updateUser(user.id_Suscripcion);
     }
   }, [error.code]);
-
 
   return (
     <div>
@@ -207,7 +206,6 @@ export const ModalEdit: React.FC<props> = ({
                 }
               />
 
-
               <Typography my={2} variant="h4">
                 Ingresar abono
               </Typography>
@@ -215,9 +213,7 @@ export const ModalEdit: React.FC<props> = ({
                 <Grid item xs={8} md={6}>
                   <div></div>
                 </Grid>
-                <Grid item xs={4} md={6}>
-      
-                </Grid>
+                <Grid item xs={4} md={6}></Grid>
               </Grid>
               <Typography
                 align="right"
@@ -227,7 +223,7 @@ export const ModalEdit: React.FC<props> = ({
                   mb: 1
                 }}
               >
-                Deuda actual 
+                Deuda actual
               </Typography>
             </div>
           )}

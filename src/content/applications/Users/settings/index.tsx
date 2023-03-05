@@ -10,39 +10,37 @@ import ActivityTab from './ActivityTab';
 import EditProfileTab from './EditProfileTab';
 import NotificationsTab from './NotificationsTab';
 import SecurityTab from './SecurityTab';
-import { useLocation } from 'react-router';
 import { getUserDetail } from 'src/services/clientService';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAll } from 'src/store/slices/userDetail/formSlice';
 
 const TabsWrapper = styled(Tabs)(
-  () => `
-    .MuiTabs-scrollableX {
-      overflow-x: auto !important;
-    }
-`
+  () => `.MuiTabs-scrollableX {overflow-x: auto !important;}`
 );
 
 interface props {
   idUser: any;
 }
-const ManagementUserSettings: React.FC<props> = ( ) => {
-  const location = useLocation();
-  const state: any = location.state;
-  console.log(location.state)
-  const [data, setData] = useState<any>(null);
+
+const ManagementUserSettings: React.FC<props> = () => {
+  const dispatch = useDispatch();
+  const { userDetail, idSelect } = useSelector(
+    (state: any) => state.userDetail
+  );
+  const [currentTab, setCurrentTab] = useState<string>('resume');
+
   useEffect(() => {
-    
-    getUserDetail(state.idUser).then((res) => {
-      setData(res);
+    getUserDetail(idSelect).then((res) => {
+      dispatch(setAll(res));
     });
     // eslint-disable-next-line
   }, []);
 
-  const [currentTab, setCurrentTab] = useState<string>('activity');
   const tabs = [
-    { value: 'activity', label: 'Resumen' },
-    { value: 'edit_profile', label: 'Editar' },
-    { value: 'notifications', label: 'Suscripciones' },
-    { value: 'security', label: 'Facturas' }
+    { value: 'resume', label: 'Resumen' },
+    { value: 'editProfile', label: 'Editar' },
+    { value: 'bill', label: 'Facturas' },
+    { value: 'subs', label: 'Suscripciones' }
   ];
 
   const handleTabsChange = (event: ChangeEvent<{}>, value: string): void => {
@@ -79,15 +77,17 @@ const ManagementUserSettings: React.FC<props> = ( ) => {
               ))}
             </TabsWrapper>
           </Grid>
-          {data !== null && (
+          {userDetail.cliente !== undefined ? (
             <Grid item xs={12}>
-              {currentTab === 'activity' && (
-                <ActivityTab resume={data.cliente} />
+              {currentTab === 'resume' && (
+                <ActivityTab resume={userDetail.cliente} />
               )}
-              {currentTab === 'edit_profile' && <EditProfileTab />}
-              {currentTab === 'notifications' && <NotificationsTab />}
-              {currentTab === 'security' && <SecurityTab />}
+              {currentTab === 'editProfile' && <EditProfileTab />}
+              {currentTab === 'bill' && <NotificationsTab />}
+              {currentTab === 'subs' && <SecurityTab user={userDetail} />}
             </Grid>
+          ) : (
+            ''
           )}
         </Grid>
       </Container>

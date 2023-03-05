@@ -6,12 +6,14 @@ import {
   Divider,
   Avatar,
   useTheme,
-  styled,
+  styled
 } from '@mui/material';
 
 import ShoppingBagTwoToneIcon from '@mui/icons-material/ShoppingBagTwoTone';
 import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import StarTwoToneIcon from '@mui/icons-material/StarTwoTone';
+import { useSelector } from 'react-redux';
+import { formatdate } from 'src/util/formatDate';
 
 const AvatarPrimary = styled(Avatar)(
   ({ theme }) => `
@@ -22,9 +24,13 @@ const AvatarPrimary = styled(Avatar)(
 `
 );
 
-function RecentActivity() {
+function RecentActivity(resume) {
   const theme = useTheme();
-
+  const { userDetail } = useSelector(
+    (state: any) => state.userDetail
+  );
+  console.log(userDetail)
+  
   return (
     <Card>
       <CardHeader title="Recent Activity" />
@@ -43,9 +49,9 @@ function RecentActivity() {
                 variant="caption"
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
-                Inicio
+                Inicio {formatdate(userDetail.suscripciones[0].fechaInicio)}
               </Typography>
-              <Typography variant="h5">12-22-2032</Typography>
+              <Typography variant="h5">{resume.fechaInicio}</Typography>
             </Box>
             <Box>
               <Typography
@@ -53,9 +59,9 @@ function RecentActivity() {
                 variant="caption"
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
-                Fin
+                  Fin {formatdate(userDetail.suscripciones[0].fechaFin)}
               </Typography>
-              <Typography variant="h4">12-22-2032</Typography>
+              <Typography variant="h4">{resume.fechaFin}</Typography>
             </Box>
           </Box>
         </Box>

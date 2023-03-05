@@ -33,8 +33,9 @@ import { formatdate } from 'src/util/formatDate';
 interface props {
   value: boolean;
   showModal(value: any): void;
+  id: any;
 }
-export const Modal: React.FC<props> = ({ value, showModal }) => {
+export const ModalActive: React.FC<props> = ({ value, showModal, id }) => {
   const [error, setError] = useState({
     code: null,
     error: false,
@@ -75,16 +76,10 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
     showModal(false);
   };
   const [user, setUser] = useState<Sale>({
-    nombre: '',
-    apellido: '',
-    telefono: '',
-    correo: '',
-    cedula: '',
-    fechaNacimiento: '',
+    id_Cliente: id,
     fechaInicio: formatdate(new Date()),
     id_Suscripcion: null,
-    id_Promocion: '1',
-    id_Cliente: null
+    id_Promocion: '1'
   });
   const insertTarget = () => {
     postSale(user).then(({ status, data }) => {
@@ -105,26 +100,12 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
         correo: '',
         cedula: '',
         fechaNacimiento: '',
-        fechaInicio: '',
-        id_Cliente: null
+        fechaInicio: ''
       });
     }
   }, [error.code]);
 
-  // const [birthay, setBirthay] = useState<any>();
-  // const onChange = (newValue: Dayjs | null) => {
-  //   setBirthay(newValue);
-  //   setUser({
-  //     ...user,
-  //     fechaNacimiento: formatdate(
-  //       new Date(newValue.toString()).toLocaleDateString('en-US')
-  //     )
-  //   });
-  // };
-
   const onChangeDateInitial = (newValue: Dayjs | null) => {
-
-
     setDateInitial(newValue);
     setUser({
       ...user,
@@ -137,12 +118,12 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
   return (
     <div>
       <Dialog open={value} onClose={handleClose}>
-        <DialogTitle>Ingresar un nuevo cliente</DialogTitle>
+        <DialogTitle>Ingresar una nuevo suscripcion al cliente</DialogTitle>
 
         <DialogContent>
           <DialogContentText>
-            Ingresa una nuevo cliente, no olvides de agregar la suscripcion
-            cuando des click en "Ingresar" podras volver a ingresar mas ventas.
+            Ingresa una nueva suscripcion, no olvides de ingresar todos los
+            campos y dar click en ingresar.
           </DialogContentText>
           {(error.code && error.status) === '200' ? (
             <Alert severity="success">
@@ -153,7 +134,7 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
           ) : (
             <div>
               <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <FormControl fullWidth sx={{ mt: 3 }}>
                     <InputLabel id="demo-simple-select-label">
                       Suscripcion
@@ -182,7 +163,7 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <FormControl fullWidth sx={{ mt: 3 }}>
                     <InputLabel id="demo-simple-select-label">
                       Promociones
@@ -211,7 +192,7 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <Stack spacing={3}>
                       <DesktopDatePicker
@@ -231,119 +212,6 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
                     </Stack>
                   </LocalizationProvider>
                 </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    margin="dense"
-                    id="identification"
-                    label="Cedula"
-                    type="text"
-                    inputProps={{
-                      maxLength: 10
-                    }}
-                    fullWidth
-                    value={user.cedula}
-                    variant="standard"
-                    onChange={(e) =>
-                      (NUMBER.test(e.target.value) || e.target.value === '') &&
-                      setUser({ ...user, cedula: e.target.value })
-                    }
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="name"
-                    label="Nombre"
-                    type="text"
-                    value={user.nombre}
-                    inputProps={{
-                      maxLength: 50
-                    }}
-                    fullWidth
-                    variant="standard"
-                    onChange={(e) =>
-                      LETTER.test(e.target.value) &&
-                      setUser({ ...user, nombre: e.target.value })
-                    }
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    margin="dense"
-                    id="lastname"
-                    label="Apellido"
-                    type="text"
-                    fullWidth
-                    value={user.apellido}
-                    inputProps={{
-                      maxLength: 50
-                    }}
-                    variant="standard"
-                    onChange={(e) =>
-                      LETTER.test(e.target.value) &&
-                      setUser({ ...user, apellido: e.target.value })
-                    }
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  {' '}
-                  <TextField
-                    margin="dense"
-                    id="phone"
-                    label="Telefono"
-                    type="text"
-                    inputProps={{
-                      maxLength: 10
-                    }}
-                    fullWidth
-                    value={user.telefono}
-                    variant="standard"
-                    onChange={(e) =>
-                      (NUMBER.test(e.target.value) || e.target.value === '') &&
-                      setUser({ ...user, telefono: e.target.value })
-                    }
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    margin="dense"
-                    id="mail"
-                    label="Correo"
-                    type="text"
-                    inputProps={{
-                      maxLength: 40
-                    }}
-                    fullWidth
-                    value={user.correo}
-                    variant="standard"
-                    onChange={(e) =>
-                      // LETTER.test(e.target.value) &&
-                      setUser({ ...user, correo: e.target.value })
-                    }
-                  />
-                </Grid>
-                {/* <Grid item xs={6}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <Stack spacing={3}>
-                    <DesktopDatePicker
-                      disableFuture
-                      label="Fecha de nacimiento"
-                      inputFormat="MM/DD/YYYY"
-                      value={birthay}
-                      onChange={onChange}
-                      renderInput={(params) => (
-                        <TextField
-                          style={{ marginTop: '8px' }}
-                          variant="standard"
-                          {...params}
-                        />
-                      )}
-                    />
-                  </Stack>
-                </LocalizationProvider>
-              </Grid> */}
               </Grid>
             </div>
           )}
@@ -367,17 +235,7 @@ export const Modal: React.FC<props> = ({ value, showModal }) => {
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
           <Button
-            disabled={
-              user.nombre &&
-              user.telefono &&
-              user.cedula &&
-              user.apellido &&
-              user.id_Suscripcion &&
-              user.correo &&
-              errorDate === null
-                ? false
-                : true
-            }
+            disabled={user.id_Suscripcion && errorDate === null ? false : true}
             onClick={insertTarget}
           >
             Ingresar

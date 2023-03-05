@@ -19,19 +19,19 @@ function DashboardCrypto() {
   const [label, setLabel] = useState([]);
   const [sale, setSale] = useState<[]>([]);
   useEffect(() => {
-    total().then((data) => {
-      setValue(data[0].total);
-      setSubtotal(data[0].subtotal);
-      setMonth(data[0].mensual);
-    });
+    // total().then((data) => {
+    //   setValue(data[0].total);
+    //   setSubtotal(data[0].subtotal);
+    //   setMonth(data[0].mensual);
+    // });
 
-    sales().then((data) => {
-      setSale(data);
-      data.forEach((element) => {
-        setChart((chart) => [...chart, Number(element.subtotal)]);
-        setLabel((label) => [...label, element.sector]);
-      });
-    });
+    // sales().then((data) => {
+    //   setSale(data);
+    //   data.forEach((element) => {
+    //     setChart((chart) => [...chart, Number(element.subtotal)]);
+    //     setLabel((label) => [...label, element.sector]);
+    //   });
+    // });
   }, []);
 
   return (
@@ -50,7 +50,7 @@ function DashboardCrypto() {
           alignItems="stretch"
           spacing={4}
         >
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <AccountBalance
               total={value}
               subtotal={subtotal}
@@ -61,7 +61,7 @@ function DashboardCrypto() {
           </Grid>
           <Grid item lg={8} xs={12}>
             <Wallets datas={sale} />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12}>
             {/* <WatchList /> */}

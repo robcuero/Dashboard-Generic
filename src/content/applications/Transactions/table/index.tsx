@@ -14,14 +14,16 @@ import clsx from 'clsx';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import React, { useEffect, useState } from 'react';
-import { getSector, getUser } from '../../../../services/clientService';
+import { getSuscripcion, getUser } from '../../../../services/clientService';
 import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
 import './index.css';
 import { GridColDef } from '@mui/x-data-grid';
-import { ModalEdit } from 'src/components/ModalEdit';
 import { ModalDelete } from 'src/components/ModalDelete';
 import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
-
+import { statusUser } from 'src/util/status';
+import { useDispatch } from 'react-redux';
+import { setUserDetail } from 'src/store/slices/userDetail/structureSlice';
+import { setIdSelect } from 'src/store/slices/userDetail/formSlice';
 export const Tables = () => {
   const [data, setData] = useState<any>();
   const [user, setUser] = useState<any>([]);
@@ -29,8 +31,11 @@ export const Tables = () => {
   const [age, setAge] = useState('');
   const [selectTarget, setSelectTarget] = useState<any>([]);
   const [sector, setSector] = useState<string>();
+  var today = new Date();
+  const [openDelete, setOpenDelete] = useState(false);
+
   useEffect(() => {
-    getSector().then((res) => {
+    getSuscripcion().then((res) => {
       setData(res);
     });
     // eslint-disable-next-line
@@ -46,20 +51,25 @@ export const Tables = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   };
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const toDescription = () => {
+  const toDescription = (id: any) => {
+    dispatch(setUserDetail(true));
+    dispatch(setIdSelect(id));
     navigate('/management/profile/settings', {
-      replace: true,
-      state: { idUser: selectTarget[0].id }
+      replace: true
     });
   };
 
-  const Edit = () => {
+  const Edit = (id) => {
     return (
       <div>
         <Tooltip title="Edit Order" arrow>
-          <IconButton onClick={toDescription} color="inherit" size="small">
+          <IconButton
+            onClick={() => toDescription(id)}
+            color="inherit"
+            size="small"
+          >
             <EditTwoToneIcon fontSize="small" />
           </IconButton>
         </Tooltip>
@@ -85,16 +95,9 @@ export const Tables = () => {
     setSelectTarget(selectedRows);
   };
 
-  const [openEdit, setOpenEdit] = useState(false);
-  const showModalEdit = (value: boolean) => {
-    setOpenEdit(value);
-  };
-
-  const [openDelete, setOpenDelete] = useState(false);
   const showModalDelete = (value: boolean) => {
     setOpenDelete(value);
   };
-  var today = new Date();
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 50 },
@@ -133,7 +136,6 @@ export const Tables = () => {
         return <div>{date}</div>;
       }
     },
-
     {
       field: 'fechaFin',
       headerName: 'Fin',
@@ -162,21 +164,18 @@ export const Tables = () => {
         return clsx('super-app', {
           positive:
             (total > 3 && (sector === '2' || sector === '3')) ||
-            (sector === '1' && total > 0),
+            (sector === '1' && statusUser(row.fechaFin)),
           negative: total < 0,
-          alert: total < 3 && total > 0 && (sector === '2' || sector === '3')
+          alert:
+            total < 3 &&
+            statusUser(row.fechaFin) &&
+            (sector === '2' || sector === '3')
         });
       },
       renderCell({ row }) {
         return (
           <div>
-            {(new Date(row.fechaFin).getTime() - today.getTime()) /
-              (1000 * 60 * 60 * 24) >
-            0 ? (
-              <div>Activo</div>
-            ) : (
-              <div>Inactivo</div>
-            )}
+            {statusUser(row.fechaFin) ? <div>Activo</div> : <div>Inactivo</div>}
           </div>
         );
       }
@@ -187,7 +186,9 @@ export const Tables = () => {
       type: 'number',
       width: 100,
       editable: false,
-      renderCell: Edit
+      renderCell({ id }) {
+        return Edit(id);
+      }
     }
   ];
 
@@ -262,17 +263,6 @@ export const Tables = () => {
           }}
         />{' '}
       </Box>
-      {selectTarget.length > 0 && (
-        <div>
-          <ModalEdit
-            showModal={showModalEdit}
-            value={openEdit}
-            selectTarget={selectTarget}
-            updateUser={getUserFilter}
-            sector={sector}
-          />
-        </div>
-      )}
 
       {selectTarget.length > 0 || openDelete ? (
         <ModalDelete
@@ -288,6 +278,3 @@ export const Tables = () => {
     </div>
   );
 };
-function Loader(arg0: any) {
-  throw new Error('Function not implemented.');
-}

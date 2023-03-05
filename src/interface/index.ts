@@ -11,7 +11,8 @@ export interface Sale {
   id_Suscripcion?: string;
   id_Producto?: any;
   message?: string;
-  fechaInicio?: string
+  fechaInicio?: string,
+  id_Promocion?: string
 }
 
 
