@@ -91,7 +91,7 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/components/buttons"
+            to="/configuration/buttons"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
@@ -102,7 +102,7 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/components/forms"
+            to="/configuration/forms"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
@@ -133,13 +133,13 @@ function HeaderMenu() {
         <MenuItem sx={{ px: 3 }} component={NavLink} to="/overview">
           Overview
         </MenuItem>
-        <MenuItem sx={{ px: 3 }} component={NavLink} to="/components/tabs">
+        <MenuItem sx={{ px: 3 }} component={NavLink} to="/configuration/tabs">
           Tabs
         </MenuItem>
-        <MenuItem sx={{ px: 3 }} component={NavLink} to="/components/cards">
+        <MenuItem sx={{ px: 3 }} component={NavLink} to="/configuration/cards">
           Cards
         </MenuItem>
-        <MenuItem sx={{ px: 3 }} component={NavLink} to="/components/modals">
+        <MenuItem sx={{ px: 3 }} component={NavLink} to="/configuration/modals">
           Modals
         </MenuItem>
       </Menu>

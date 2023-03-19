@@ -83,8 +83,7 @@ function Hero() {
         sessionStorage.setItem('token', data.token);
 
         navigate('/dashboards/crypto');
-    
-   
+
         return;
       }
       setError(true);
@@ -124,18 +123,22 @@ function Hero() {
               }}
               id="outlined-password-input"
               label="Contraseña"
+              required
               type="password"
               onChange={(e) => setUser({ ...user, contrasena: e.target.value })}
               autoComplete="current-password"
             />
           </div>
           {error && (
-            <Alert severity="error">
-              This is an error alert — check it out!
-            </Alert>
+            <div style={{display: 'flex', justifyContent:'center', marginBottom:'15px'}}>
+              <Alert severity="error" style={{ width: '300px' }}>
+                Datos incorrectos
+              </Alert>
+            </div>
           )}
 
           <Button
+            style={{ width: '200px' }}
             onClick={testAuth}
             size="large"
             variant="contained"
@@ -144,7 +147,7 @@ function Hero() {
             Iniciar sesion
           </Button>
 
-          <Grid container spacing={3} mt={5}>
+          <Grid spacing={3} mt={5}>
             <Grid item md={12}>
               <MuiAvatar>
                 <img
@@ -161,7 +164,6 @@ function Hero() {
                 </Typography>
               </Typography>
             </Grid>
-
           </Grid>
         </Grid>
       </Grid>

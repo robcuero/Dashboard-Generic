@@ -50,7 +50,7 @@ const ManagementUserSettings: React.FC<props> = () => {
   return (
     <>
       <Helmet>
-        <title>User Settings - Applications</title>
+        <title>Detalle de Usuario - Applications</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader />
@@ -67,7 +67,7 @@ const ManagementUserSettings: React.FC<props> = () => {
             <TabsWrapper
               onChange={handleTabsChange}
               value={currentTab}
-              variant="scrollable"
+              variant="fullWidth"
               scrollButtons="auto"
               textColor="primary"
               indicatorColor="primary"
@@ -77,12 +77,10 @@ const ManagementUserSettings: React.FC<props> = () => {
               ))}
             </TabsWrapper>
           </Grid>
-          {userDetail.cliente !== undefined ? (
+          {userDetail.cliente !== null ? (
             <Grid item xs={12}>
-              {currentTab === 'resume' && (
-                <ActivityTab resume={userDetail.cliente} />
-              )}
-              {currentTab === 'editProfile' && <EditProfileTab />}
+              {currentTab === 'resume' && (<ActivityTab resume={userDetail} />)}
+              {currentTab === 'editProfile' && <EditProfileTab user={userDetail}/>}
               {currentTab === 'bill' && <NotificationsTab />}
               {currentTab === 'subs' && <SecurityTab user={userDetail} />}
             </Grid>

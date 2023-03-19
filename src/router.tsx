@@ -37,6 +37,14 @@ const UserSettings = Loader(
   lazy(() => import('src/content/applications/Users/settings'))
 );
 
+const SuscriptionConfig = Loader(
+  lazy(() => import('src/content/applications/Configurations/Suscriptions'))
+);
+
+const PromotionConfig = Loader(
+  lazy(() => import('src/content/applications/Configurations/Promotions'))
+);
+
 // Components
 
 const Buttons = Loader(
@@ -148,7 +156,11 @@ const routes: RouteObject[] = [
       },
       {
         path: 'transactions',
-        element: <Transactions />
+        element: <Transactions />,
+      },
+      {
+        path: 'user',
+        element: <UserSettings />,
       },
       {
         path: 'profile',
@@ -170,12 +182,20 @@ const routes: RouteObject[] = [
     ]
   },
   {
-    path: '/components',
+    path: '/configuration',
     element: <SidebarLayout /> ,
     children: [
       {
         path: '',
         element: <Navigate to="buttons" replace />
+      },
+      {
+        path: 'suscription',
+        element: <SuscriptionConfig />
+      },
+      {
+        path: 'promotion',
+        element: <PromotionConfig />
       },
       {
         path: 'buttons',

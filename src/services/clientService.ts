@@ -1,10 +1,17 @@
 // import { Pokemon } from "../interface";
-import { Sale, Sector } from 'src/interface';
+import { Sale, Sector, Suscripcion,Promotion } from 'src/interface';
 import api from '../services/api/jericoApi';
 
 export const getPromocion = async () => {
   try {
     const { data } = await api.get('/Promocion');
+    return data;
+  } catch (error) {}
+};
+
+export const getSuscripcionAll = async () => {
+  try {
+    const { data } = await api.get('/Suscripcion/all');
     return data;
   } catch (error) {}
 };
@@ -16,9 +23,26 @@ export const getSuscripcion = async () => {
   } catch (error) {}
 };
 
+export const postSuscripcion = async (Suscripcion: Suscripcion) => {
+  try {
+    const { status } = await api.post(`/Suscripcion`, Suscripcion);
+    return { status };
+  } catch (error) {
+    return error.code;
+  }
+};
+
+export const postPromotion = async (Promotion: Promotion) => {
+  try {
+    const { status } = await api.post(`/Promocion`, Promotion);
+    return { status };
+  } catch (error) {
+    return error.code;
+  }
+};
+
 export const postSector = async (target: Sector) => {
   try {
-    console.log(target)
     const { status } = await api.post(`/Suscripcion`, target);
     return status;
   } catch (error) {
@@ -42,8 +66,29 @@ export const getUserDetail = async (id: string) => {
 
 export const postSale = async (target: Sale) => {
   try {
-    const { status,data } = await api.post(`/UsuarioSuscripcion`, target);
-    return {status,data};
+    const { status, data } = await api.post(`/UsuarioSuscripcion`, target);
+    return { status, data };
+  } catch (error) {
+    return error.code;
+  }
+};
+
+export const postActiveSus = async (target: Sale) => {
+  try {
+    const { status, data } = await api.post(
+      `/UsuarioSuscripcion/activeSuscription`,
+      target
+    );
+    return { status, data };
+  } catch (error) {
+    return error.code;
+  }
+};
+
+export const updateUser = async (target: Sale) => {
+  try {
+    const { status, data } = await api.post(`/Cliente`, target);
+    return { status, data };
   } catch (error) {
     return error.code;
   }
@@ -67,15 +112,16 @@ export const deleteTarget = async (id: any) => {
   }
 };
 
-export const deleteSuscription= async (id: any) => {
+export const deleteSuscription = async (id: any) => {
   try {
-    const { status } = await api.delete(`/UsuarioSuscripcion/deleteSuscription/${id}`);
+    const { status } = await api.delete(
+      `/UsuarioSuscripcion/deleteSuscription/${id}`
+    );
     return status;
   } catch (error) {
     return error.code;
   }
 };
-
 
 export const login = async (user: any) => {
   try {
@@ -112,6 +158,3 @@ export const sales = async () => {
     return error.code;
   }
 };
-
-
-

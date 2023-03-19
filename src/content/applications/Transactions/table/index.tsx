@@ -14,41 +14,52 @@ import clsx from 'clsx';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import React, { useEffect, useState } from 'react';
-import { getSuscripcion, getUser } from '../../../../services/clientService';
-import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
+import {
+  getSuscripcionAll,
+  getUser
+} from '../../../../services/clientService';
+import { DataGrid, GridSelectionModel, esES } from '@mui/x-data-grid';
 import './index.css';
 import { GridColDef } from '@mui/x-data-grid';
-import { ModalDelete } from 'src/components/ModalDelete';
+import { ModalDelete } from 'src/components/Modal/ModalDelete';
 import { NavLink as RouterLink, useNavigate } from 'react-router-dom';
 import { statusUser } from 'src/util/status';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetail } from 'src/store/slices/userDetail/structureSlice';
 import { setIdSelect } from 'src/store/slices/userDetail/formSlice';
+import { formatdate } from 'src/util/formatDate';
+import {
+  setSuscription,
+  setUserSuscription
+} from 'src/store/slices/userDetail/allUserSlice';
 export const Tables = () => {
   const [data, setData] = useState<any>();
-  const [user, setUser] = useState<any>([]);
   const theme = useTheme();
   const [age, setAge] = useState('');
   const [selectTarget, setSelectTarget] = useState<any>([]);
-  const [sector, setSector] = useState<string>();
   var today = new Date();
   const [openDelete, setOpenDelete] = useState(false);
-
+  const { userSuscription, idSuscription,suscription  } = useSelector(
+    (state: any) => state.allUser
+  );
   useEffect(() => {
-    getSuscripcion().then((res) => {
+    getSuscripcionAll().then((res) => {
       setData(res);
     });
     // eslint-disable-next-line
   }, []);
 
-  const getUserFilter = (id: string) => {
-    setSector(id);
+  const getUserFilter = (id: string, nombre?: string) => {
+    if (nombre) {
+      dispatch(setSuscription({ id, nombre }));
+    }
     getUser(id).then((res) => {
-      setUser(res);
+      dispatch(setUserSuscription(res));
     });
   };
 
   const handleChange = (event: SelectChangeEvent) => {
+    console.log(event)
     setAge(event.target.value as string);
   };
   const dispatch = useDispatch();
@@ -56,7 +67,7 @@ export const Tables = () => {
   const toDescription = (id: any) => {
     dispatch(setUserDetail(true));
     dispatch(setIdSelect(id));
-    navigate('/management/profile/settings', {
+    navigate('/management/user', {
       replace: true
     });
   };
@@ -91,7 +102,7 @@ export const Tables = () => {
   };
   const showInfo = (id: GridSelectionModel) => {
     const selectedIDs = new Set(id);
-    const selectedRows = user.filter((r) => selectedIDs.has(r.id));
+    const selectedRows = userSuscription.filter((r) => selectedIDs.has(r.id));
     setSelectTarget(selectedRows);
   };
 
@@ -122,34 +133,32 @@ export const Tables = () => {
     {
       field: 'cedula',
       headerName: 'Cedula',
-      width: 200,
+      width: 140,
       editable: false
     },
 
     {
       field: 'fechaInicio',
-      headerName: 'Inicio',
+      headerName: 'Fecha Inicio',
       width: 150,
       editable: false,
       renderCell({ row }) {
-        let date = new Date(row.fechaInicio).toLocaleDateString('en-US');
-        return <div>{date}</div>;
+        return <div>{formatdate(row.fechaInicio)}</div>;
       }
     },
     {
       field: 'fechaFin',
-      headerName: 'Fin',
+      headerName: 'Fecha Fin',
       type: 'date',
       width: 150,
       editable: false,
       renderCell({ row }) {
-        let date = new Date(row.fechaFin).toLocaleDateString('en-US');
-        return <div>{date}</div>;
+        return <div>{formatdate(row.fechaFin)}</div>;
       }
     },
     {
-      field: 'Status',
-      headerName: 'Status',
+      field: 'estado',
+      headerName: 'Estado',
       width: 100,
       headerAlign: 'center',
       align: 'center',
@@ -163,21 +172,17 @@ export const Tables = () => {
           (1000 * 60 * 60 * 24);
         return clsx('super-app', {
           positive:
-            (total > 3 && (sector === '2' || sector === '3')) ||
-            (sector === '1' && statusUser(row.fechaFin)),
+            (total > 3 && (idSuscription === '2' || idSuscription === '3' || idSuscription ==='5')) ||
+            (idSuscription === '1' && statusUser(row.fechaFin)),
           negative: total < 0,
           alert:
             total < 3 &&
             statusUser(row.fechaFin) &&
-            (sector === '2' || sector === '3')
+            (idSuscription === '2' || idSuscription === '3' || idSuscription ==='5')
         });
       },
       renderCell({ row }) {
-        return (
-          <div>
-            {statusUser(row.fechaFin) ? <div>Activo</div> : <div>Inactivo</div>}
-          </div>
-        );
+        return <div>{row.estado}</div>;
       }
     },
     {
@@ -206,12 +211,12 @@ export const Tables = () => {
           }}
           variant="h4"
         >
-          {user.length > 0
-            ? `Esta suscripciones tiene ${user.length} personas`
+          {userSuscription.length > 0
+            ? `Esta suscripciones tiene ${userSuscription.length} personas`
             : ' Escoje una opcion con suscripciones'}
         </Typography>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Suscripcion</InputLabel>
+          <InputLabel id="demo-simple-select-label">{suscription? suscription: "Suscripcion"}</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -223,7 +228,7 @@ export const Tables = () => {
               <MenuItem
                 key={index}
                 value={index}
-                onClick={() => getUserFilter(data.idSuscripcion)}
+                onClick={() => getUserFilter(data.idSuscripcion, data.nombre)}
               >
                 {data.nombre}
               </MenuItem>
@@ -253,7 +258,8 @@ export const Tables = () => {
         }}
       >
         <DataGrid
-          rows={user}
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+          rows={userSuscription}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[5]}
@@ -270,7 +276,7 @@ export const Tables = () => {
           value={openDelete}
           selectTarget={selectTarget}
           updateUser={getUserFilter}
-          sector={sector}
+          sector={idSuscription}
         />
       ) : (
         ''

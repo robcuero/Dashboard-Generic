@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import Text from 'src/components/Text';
 import Label from 'src/components/Label';
 import { postSector } from 'src/services/clientService';
-import { ModalSector } from 'src/components/ModalSector';
+import { ModalSector } from 'src/components/Modal/ModalSector';
 const AvatarWrapper = styled(Avatar)(
   ({ theme }) => `
     margin: ${theme.spacing(2, 0, 1, -0.5)};
@@ -82,7 +82,7 @@ interface props {
 }
 export const Wallets: React.FC<props> = ({ datas }) => {
 
-
+debugger
   const [openDelete, setOpenDelete] = useState(false);
   const showModalDelete = (value: boolean) => {
     setOpenDelete(value);

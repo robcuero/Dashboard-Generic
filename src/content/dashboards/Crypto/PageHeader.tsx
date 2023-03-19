@@ -4,13 +4,15 @@ import { useEffect, useState } from 'react';
 import { profile } from 'src/services/clientService';
 function PageHeader() {
   const theme = useTheme();
-  
-
-  const [value, setValue] = useState({nombre:null, avatar:null})
+  const [value, setValue] = useState({ nombre: null, avatar: null });
 
   useEffect(() => {
     profile().then((data) => {
-      setValue({...value,nombre:`${data.nombre} ${data.apellido}`,avatar:data.nombre})
+      setValue({
+        ...value,
+        nombre: `${data.nombre} ${data.apellido}`,
+        avatar: data.nombre
+      });
     });
   }, []);
   const user = {

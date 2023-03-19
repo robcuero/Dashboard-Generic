@@ -2,7 +2,7 @@ import { Typography, Button, Grid } from '@mui/material';
 
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { useState } from 'react';
-import { Modal } from 'src/components/ModalCreate';
+import { Modal } from 'src/components/Modal/ModalCreate';
 
 function PageHeader() {
   const info = {
@@ -18,10 +18,10 @@ function PageHeader() {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          Suscripciones 
+          Suscripciones
         </Typography>
         <Typography variant="subtitle2">
-          {info.name}, estas son las transacciones recientes
+          {info.name}, estas son las Suscripciones recientes
         </Typography>
       </Grid>
       <Grid item>
@@ -31,7 +31,7 @@ function PageHeader() {
           variant="contained"
           startIcon={<AddTwoToneIcon fontSize="small" />}
         >
-          Crear transaccion
+          Nueva Suscripción
         </Button>
         <Modal showModal={showModal} value={open} />
       </Grid>

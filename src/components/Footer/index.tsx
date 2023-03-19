@@ -18,7 +18,7 @@ function Footer() {
       >
         <Box>
           <Typography variant="subtitle1">
-            &copy; 2022 - Creditos Jerico Dashboard
+            &copy; 2022 - FitGym Dashboard
           </Typography>
         </Box>
         <Typography

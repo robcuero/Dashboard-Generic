@@ -48,7 +48,6 @@ export const columns: GridColDef[] = [
 
 export const SEPARATOR = /^\d+(.\d{0,2})?$/;
 
-export const LETTER = /^[ñíóáéú a-zA-Z ]+$/
-
+export const LETTER = /^[ñíóáéú a-zA-Z]+$/
 
 export const NUMBER = /^[0-9]+$/

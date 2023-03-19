@@ -14,6 +14,7 @@ import FavoriteTwoToneIcon from '@mui/icons-material/FavoriteTwoTone';
 import StarTwoToneIcon from '@mui/icons-material/StarTwoTone';
 import { useSelector } from 'react-redux';
 import { formatdate } from 'src/util/formatDate';
+import { calculateIdealBodyWeight } from 'src/util/weigthIdeal';
 
 const AvatarPrimary = styled(Avatar)(
   ({ theme }) => `
@@ -26,11 +27,7 @@ const AvatarPrimary = styled(Avatar)(
 
 function RecentActivity(resume) {
   const theme = useTheme();
-  const { userDetail } = useSelector(
-    (state: any) => state.userDetail
-  );
-  console.log(userDetail)
-  
+  const { userDetail } = useSelector((state: any) => state.userDetail);
   return (
     <Card>
       <CardHeader title="Recent Activity" />
@@ -59,7 +56,7 @@ function RecentActivity(resume) {
                 variant="caption"
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
-                  Fin {formatdate(userDetail.suscripciones[0].fechaFin)}
+                Fin {formatdate(userDetail.suscripciones[0].fechaFin)}
               </Typography>
               <Typography variant="h4">{resume.fechaFin}</Typography>
             </Box>
@@ -81,9 +78,9 @@ function RecentActivity(resume) {
                 variant="caption"
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
-                Esperado
+                Actual
               </Typography>
-              <Typography variant="h4">64 kg</Typography>
+              <Typography variant="h4">{userDetail.cliente.peso} kg</Typography>
             </Box>
             <Box>
               <Typography
@@ -91,9 +88,15 @@ function RecentActivity(resume) {
                 variant="caption"
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
-                Actual
+                Esperado
               </Typography>
-              <Typography variant="h4">15 kg</Typography>
+              <Typography variant="h4">
+                {calculateIdealBodyWeight(
+                  userDetail.cliente.altura,
+                  userDetail.cliente.peso
+                )}{' '}
+                kg
+              </Typography>
             </Box>
           </Box>
         </Box>
@@ -104,7 +107,7 @@ function RecentActivity(resume) {
           <StarTwoToneIcon />
         </AvatarPrimary>
         <Box pl={2} flex={1}>
-          <Typography variant="h3">Reviews</Typography>
+          <Typography variant="h3">Puntos</Typography>
 
           <Box pt={2} display="flex">
             <Box pr={8}>
@@ -115,7 +118,7 @@ function RecentActivity(resume) {
               >
                 Total
               </Typography>
-              <Typography variant="h2">654</Typography>
+              <Typography variant="h2">{userDetail.cliente.puntos}</Typography>
             </Box>
             <Box>
               <Typography
@@ -123,9 +126,9 @@ function RecentActivity(resume) {
                 variant="caption"
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
-                Useful
+                Suscripciones
               </Typography>
-              <Typography variant="h2">21</Typography>
+              <Typography variant="h2">{userDetail.suscripciones.length}</Typography>
             </Box>
           </Box>
         </Box>

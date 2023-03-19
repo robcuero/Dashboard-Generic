@@ -1,4 +1,4 @@
-import { useState, MouseEvent, ChangeEvent } from 'react';
+import { useState, MouseEvent, ChangeEvent, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -8,77 +8,45 @@ import {
   List,
   ListItemText,
   Divider,
-  Button,
   ListItemAvatar,
-  Avatar,
   CardHeader,
-  Tooltip,
-  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  TableContainer,
-  useTheme,
-  styled
+  TableContainer
 } from '@mui/material';
 
 import DoneTwoToneIcon from '@mui/icons-material/DoneTwoTone';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { statusUser } from 'src/util/status';
 import { formatdate } from 'src/util/formatDate';
-import { ModalActive } from 'src/components/ModalActiveSuscription';
-import { ModalDeleteSuscription } from 'src/components/ModalDeleteSus';
-
-const ButtonError = styled(Button)(
-  ({ theme }) => `
-     background: ${theme.colors.error.main};
-     color: ${theme.palette.error.contrastText};
-
-     &:hover {
-        background: ${theme.colors.error.dark};
-     }
-    `
-);
-
-const ButtonSuccess = styled(Button)(
-  ({ theme }) => `
-     background: ${theme.colors.success.main};
-     color: ${theme.palette.success.contrastText};
-
-     &:hover {
-        background: ${theme.colors.success.dark};
-     }
-    `
-);
-
-const AvatarSuccess = styled(Avatar)(
-  ({ theme }) => `
-    background: ${theme.colors.success.light};
-    width: ${theme.spacing(5)};
-    height: ${theme.spacing(5)};
-`
-);
-
-const AvatarError = styled(Avatar)(
-  ({ theme }) => `
-    background: ${theme.colors.error.main};
-    width: ${theme.spacing(5)};
-    height: ${theme.spacing(5)};
-`
-);
+import { ModalActive } from 'src/components/Modal/ModalActiveSusUser';
+import {
+  AvatarError,
+  AvatarSuccess,
+  ButtonError,
+  ButtonSuccess
+} from './style';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  deleteSuscription,
+  getUser,
+  getUserDetail
+} from 'src/services/clientService';
+import { setAll } from 'src/store/slices/userDetail/formSlice';
+import { setUserSuscription } from 'src/store/slices/userDetail/allUserSlice';
+import { ModalDeleteGeneric } from 'src/components/Modal/ModalDeleteGeneric';
 
 function SecurityTab(user) {
-  const theme = useTheme();
   const [page, setPage] = useState(2);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDeleteSus, setOpenDeleteSus] = useState(false);
-  const status = statusUser(user.user.suscripciones[0].fechaFin);
+  const [status, setStatus] = useState(false);
+  const statusSus = user.user.suscripciones[0].estado;
   const idSuscripcion = user.user.suscripciones[0].idUsuarioSuscripcion;
-  console.log(idSuscripcion);
+
   const handleChangePage = (
     event: MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -99,13 +67,32 @@ function SecurityTab(user) {
   const showModalActive = (value: boolean) => {
     setOpenDelete(value);
   };
+  const { idSuscription } = useSelector((state: any) => state.allUser);
+  const dispatch = useDispatch();
+  const insertTarget = () => {
+    deleteSuscription(idSuscripcion).then((status: number) => {
+      if (status === 200) {
+        setStatus(true);
+        getUserDetail(user.user.cliente.idCliente).then((res) => {
+          dispatch(setAll(res));
+        });
+        getUser(idSuscription).then((res) => {
+          dispatch(setUserSuscription(res));
+        });
+      } else {
+        setStatus(false);
+      }
+    });
+    return status;
+  };
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <Box pb={2}>
-          <Typography variant="h3">Social Accounts</Typography>
+          <Typography variant="h3">Lista de Suscripciones</Typography>
           <Typography variant="subtitle2">
-            Manage connected social accounts options
+            Administrar las suscripciones pasadas y actuales
           </Typography>
         </Box>
       </Grid>
@@ -114,7 +101,7 @@ function SecurityTab(user) {
           <List>
             <ListItem sx={{ p: 3 }}>
               <ListItemAvatar sx={{ pr: 2 }}>
-                {status ? (
+                {statusSus === 'ACTIVO' ? (
                   <AvatarSuccess>
                     <DoneTwoToneIcon />
                   </AvatarSuccess>
@@ -130,16 +117,16 @@ function SecurityTab(user) {
                   variant: 'subtitle2',
                   lineHeight: 1
                 }}
-                primary={status ? 'Activo' : 'Inactivo'}
+                primary={statusSus === 'ACTIVO' ? 'Activo' : 'Inactivo'}
                 secondary={formatdate(user.user.suscripciones[0].fechaFin)}
               />
-              {status ? (
+              {statusSus === 'ACTIVO' ? (
                 <ButtonError
                   size="large"
                   variant="contained"
                   onClick={() => showModalDelete(true)}
                 >
-                  Finalizar Suscripcion
+                  Eliminar Suscripcion
                 </ButtonError>
               ) : (
                 <ButtonSuccess
@@ -150,17 +137,16 @@ function SecurityTab(user) {
                   Activar Suscripcion
                 </ButtonSuccess>
               )}
-              <ModalDeleteSuscription
+
+              <ModalDeleteGeneric
                 showModal={showModalDelete}
                 value={openDeleteSus}
-                id={idSuscripcion}
-                // updateUser={getUserFilter}
-                // sector={sector}
+                send={insertTarget}
               />
               <ModalActive
                 showModal={showModalActive}
                 value={openDelete}
-                id={user.user.cliente[0].idCliente}
+                id={user.user.cliente.idCliente}
               />
             </ListItem>
           </List>
@@ -172,23 +158,33 @@ function SecurityTab(user) {
           <CardHeader
             subheaderTypographyProps={{}}
             titleTypographyProps={{}}
-            title="Access Logs"
-            subheader="Recent sign in activity logs"
+            title="Todas las sucripciones"
+            subheader="Registros actualizados del usuario"
           />
           <Divider />
           <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
-                  {/* <TableCell>Id</TableCell> */}
+                  <TableCell align="center">Suscripcion</TableCell>
+                  <TableCell align="center">Precio</TableCell>
+                  <TableCell align="center">Promocion</TableCell>
+                  <TableCell align="center">Total</TableCell>
                   <TableCell align="center">Fecha inicio</TableCell>
                   <TableCell align="center">Fecha fin</TableCell>
-                  <TableCell align="center">Actions</TableCell>
+                  <TableCell align="center">Estado</TableCell>
+                  {/* <TableCell align="center">Actions</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {user.user.suscripciones.map((log, item) => (
                   <TableRow key={item} hover>
+                    <TableCell align="center">
+                      {log.nombreSuscripcion}
+                    </TableCell>
+                    <TableCell align="center">$ {log.total}</TableCell>
+                    <TableCell align="center">{log.promocion}</TableCell>
+                    <TableCell align="center">$ {log.descuento}</TableCell>
                     <TableCell align="center">
                       {formatdate(log.fechaInicio)}
                     </TableCell>
@@ -196,7 +192,8 @@ function SecurityTab(user) {
                       {' '}
                       {formatdate(log.fechaFin)}
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center">{log.estado}</TableCell>
+                    {/* <TableCell align="center">
                       <Tooltip placement="top" title="Delete" arrow>
                         <IconButton
                           sx={{
@@ -211,7 +208,7 @@ function SecurityTab(user) {
                           <DeleteTwoToneIcon fontSize="small" />
                         </IconButton>
                       </Tooltip>
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>

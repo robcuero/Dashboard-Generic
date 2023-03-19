@@ -21,7 +21,6 @@ import CheckBoxTwoToneIcon from '@mui/icons-material/CheckBoxTwoTone';
 import ChromeReaderModeTwoToneIcon from '@mui/icons-material/ChromeReaderModeTwoTone';
 import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
 import CameraFrontTwoToneIcon from '@mui/icons-material/CameraFrontTwoTone';
-import DisplaySettingsTwoToneIcon from '@mui/icons-material/DisplaySettingsTwoTone';
 import { MenuWrapper, SubItemMenuWrapper, SubMenuWrapper } from './style';
 import { useSelector } from 'react-redux';
 
@@ -101,7 +100,7 @@ function SidebarMenu() {
                   to="/management/transactions"
                   startIcon={<TableChartTwoToneIcon />}
                 >
-                  Ventas
+                  Usuarios
                 </Button>
               </ListItem>
             </List>
@@ -115,7 +114,7 @@ function SidebarMenu() {
                     disableRipple
                     component={RouterLink}
                     onClick={closeSidebar}
-                    to="/management/profile/settings"
+                    to="/management/user"
                     startIcon={<AccountCircleTwoToneIcon />}
                   >
                     Detalle de Usuario
@@ -129,25 +128,37 @@ function SidebarMenu() {
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Accounts
+              Configuracion
             </ListSubheader>
           }
         >
           <SubMenuWrapper>
             <List component="div">
+            <ListItem component="div">
+                <Button
+                  disableRipple
+                  component={RouterLink}
+                  onClick={closeSidebar}
+                  to="/configuration/suscription"
+                  startIcon={<BrightnessLowTwoToneIcon />}
+                >
+                  Suscripciones
+                </Button>
+              </ListItem>
               <ListItem component="div">
                 <Button
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/management/profile/details"
-                  startIcon={<AccountCircleTwoToneIcon />}
+                  to="/configuration/promotion"
+                  startIcon={<BrightnessLowTwoToneIcon />}
                 >
-                  User Profile
+                  Promociones
                 </Button>
               </ListItem>
             </List>
           </SubMenuWrapper>
+          
         </List>
         <List
           component="div"
@@ -164,7 +175,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/buttons"
+                  to="/configuration/buttons"
                   startIcon={<BallotTwoToneIcon />}
                 >
                   Buttons
@@ -175,7 +186,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/modals"
+                  to="/configuration/modals"
                   startIcon={<BeachAccessTwoToneIcon />}
                 >
                   Modals
@@ -186,7 +197,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/accordions"
+                  to="/configuration/accordions"
                   startIcon={<EmojiEventsTwoToneIcon />}
                 >
                   Accordions
@@ -197,7 +208,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/tabs"
+                  to="/configuration/tabs"
                   startIcon={<FilterVintageTwoToneIcon />}
                 >
                   Tabs
@@ -208,7 +219,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/badges"
+                  to="/configuration/badges"
                   startIcon={<HowToVoteTwoToneIcon />}
                 >
                   Badges
@@ -219,7 +230,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/tooltips"
+                  to="/configuration/tooltips"
                   startIcon={<LocalPharmacyTwoToneIcon />}
                 >
                   Tooltips
@@ -230,7 +241,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/avatars"
+                  to="/configuration/avatars"
                   startIcon={<RedeemTwoToneIcon />}
                 >
                   Avatars
@@ -241,7 +252,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/cards"
+                  to="/configuration/cards"
                   startIcon={<SettingsTwoToneIcon />}
                 >
                   Cards
@@ -252,7 +263,7 @@ function SidebarMenu() {
                   disableRipple
                   component={RouterLink}
                   onClick={closeSidebar}
-                  to="/components/forms"
+                  to="/configuration/forms"
                   startIcon={<TrafficTwoToneIcon />}
                 >
                   Forms

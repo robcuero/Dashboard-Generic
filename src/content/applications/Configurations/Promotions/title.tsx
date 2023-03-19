@@ -1,20 +1,28 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import PropTypes from 'prop-types';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { Typography, Button, Grid } from '@mui/material';
+import { ModalCreatePro } from 'src/components/Modal/ModalCreatePro';
 
 interface PageTitleProps {
   heading?: string;
   subHeading?: string;
   docs?: string;
+  genericFunction() : any
 }
 
 const PageTitle: FC<PageTitleProps> = ({
   heading = '',
   subHeading = '',
   docs = '',
+  genericFunction,
   ...rest
 }) => {
+  const [openModal, setOpenModal] = useState(false);
+
+  const showModal = (value: boolean) => {
+    setOpenModal(value);
+  };
   return (
     <Grid
       container
@@ -28,16 +36,16 @@ const PageTitle: FC<PageTitleProps> = ({
         </Typography>
         <Typography variant="subtitle2">{subHeading}</Typography>
       </Grid>
+      <ModalCreatePro showModal={showModal } value={openModal} genericFunction={genericFunction}/>
       <Grid item>
         <Button
-          href={docs}
-          target="_blank"
-          rel="noopener noreferrer"
+          onClick={() => showModal(true)}
           sx={{ mt: { xs: 2, md: 0 } }}
           variant="contained"
           startIcon={<AddTwoToneIcon fontSize="small" />}
         >
-          {"Nueva "}{heading}
+          {'Nueva '}
+          {heading}
         </Button>
       </Grid>
     </Grid>

@@ -64,7 +64,10 @@ const ButtonUploadWrapper = styled(Box)(
 );
 
 function ActivityTab(resume: any) {
-  const client = resume.resume[0];
+  const client = resume.resume.cliente;
+  const status = resume.resume.suscripciones[0].estado;
+  const yearActual = new Date().getFullYear();
+  console.log('aaa', yearActual);
   return (
     <>
       <Container sx={{ mt: 3 }} maxWidth="lg">
@@ -92,23 +95,17 @@ function ActivityTab(resume: any) {
                 </Typography>
               </Box>
             </Box>
-            {/* <CardCover>
-  <CardMedia image={user.coverImg} />
-  <CardCoverAction>
-    <Input accept="image/*" id="change-cover" multiple type="file" />
-    <label htmlFor="change-cover">
-      <Button
-        startIcon={<UploadTwoToneIcon />}
-        variant="contained"
-        component="span"
-      >
-        Change cover
-      </Button>
-    </label>
-  </CardCoverAction>
-</CardCover> */}
+
             <AvatarWrapper style={{ marginTop: '0px' }}>
-              <Avatar variant="rounded" alt={'https://citygymdoha.com/wp-content/uploads/2018/12/aby.jpg'} src={'https://citygymdoha.com/wp-content/uploads/2018/12/aby.jpg'} />
+              <Avatar
+                variant="rounded"
+                alt={
+                  'https://citygymdoha.com/wp-content/uploads/2018/12/aby.jpg'
+                }
+                src={
+                  'https://citygymdoha.com/wp-content/uploads/2018/12/aby.jpg'
+                }
+              />
               <ButtonUploadWrapper>
                 <Input
                   accept="image/*"
@@ -130,16 +127,27 @@ function ActivityTab(resume: any) {
 
               <Box alignItems="center">
                 <Box style={{ display: 'flex', columnGap: '5px' }}>
-                  <Alert
-                    variant="outlined"
-                    severity="success"
-                    style={{ width: '124px' }}
-                  >
-                    Activo
-                  </Alert>
+                  {status === 'ACTIVO' ? (
+                    <Alert
+                      variant="filled"
+                      severity="success"
+                      style={{ width: '124px' }}
+                    >
+                      Activo
+                    </Alert>
+                  ) : (
+                    <Alert
+                      variant="filled"
+                      severity="error"
+                      style={{ width: '124px' }}
+                    >
+                      Inactivo
+                    </Alert>
+                  )}
+
                   <Button size="small" variant="contained">
-                    <WhatsAppIcon />
-                    {'Mensaje '}
+                    <WhatsAppIcon style={{ paddingRight: '10px' }} />
+                    {' Mensaje '}
                   </Button>
                   <Button size="small" variant="outlined">
                     <ShareIcon />
@@ -190,14 +198,16 @@ function ActivityTab(resume: any) {
                 style={{ columnGap: '10px' }}
               >
                 <Typography gutterBottom variant="h4">
-                  {'Fecha de nacimiento: '}
+                  {'Edad: '}
                 </Typography>
                 <Typography
                   sx={{ py: 2 }}
                   variant="subtitle2"
                   color="text.primary"
                 >
-                  {formatdate(client.fechaNacimiento)}
+                  {Number(yearActual) -
+                    new Date(client.fechaNacimiento).getFullYear()}{' '}
+                  {' años'}
                 </Typography>
               </Box>
 

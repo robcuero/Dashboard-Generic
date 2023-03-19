@@ -1,4 +1,5 @@
 import{configureStore}from "@reduxjs/toolkit";
+import { allUserSlice } from "./slices/userDetail/allUserSlice";
 import { userDetailSlice } from "./slices/userDetail/formSlice";
 import { structureSlice } from "./slices/userDetail/structureSlice";
 
@@ -6,6 +7,7 @@ export const store=configureStore({
     reducer:{
      userDetail:userDetailSlice.reducer,
      structure: structureSlice.reducer,
+     allUser: allUserSlice.reducer,
     }
 })
 

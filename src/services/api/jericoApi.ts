@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 
 const rest = axios.create({
-  baseURL: 'http://gym001-001-site1.dtempurl.com/api'
+  baseURL: 'https://localhost:44396/api'
+  //baseURL: 'http://gym001-001-site1.dtempurl.com/api'
 });
 
 rest.interceptors.request.use(

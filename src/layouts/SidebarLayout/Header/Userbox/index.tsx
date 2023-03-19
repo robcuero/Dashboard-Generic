@@ -144,7 +144,7 @@ const [value, setValue] = useState({nombre:null, avatar:null})
           </ListItem>
           <ListItem
             button
-            to="/management/profile/settings"
+            to="/management/transactions/settings"
             component={NavLink}
           >
             <AccountTreeTwoToneIcon fontSize="small" />
